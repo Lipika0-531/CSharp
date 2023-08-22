@@ -41,9 +41,9 @@
         /// <param name="x">x denotes variable x</param>
         /// <param name="y">y denotes variable y</param>
         /// <returns>it returns division of two values</returns>
-        public double Divide(int x, int y)
+        public double Divide(double x, double y)
         {
-            if( y == 0)
+            if ( y == 0)
             {
                 throw new DivideByZeroException();
             }

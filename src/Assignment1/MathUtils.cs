@@ -11,7 +11,7 @@
         /// <param name="x">x denotes variable x</param>
         /// <param name="y">y denotes variable y</param>
         /// <returns>it returns x + y</returns>
-        public long Add(int x, int y)
+        public double Add(double x, double y)
         {
             return (long)x + y;
         }
@@ -21,7 +21,7 @@
         /// <param name="x">x denotes variable x</param>
         /// <param name="y">y denotes variable y</param>
         /// <returns>subtract</returns>
-        public long Subtract(int x, int y)
+        public double Subtract(double x, double y)
         {
             return (long)x - y;
         }
@@ -31,7 +31,7 @@
         /// <param name="x">x denotes variable x</param>
         /// <param name="y">y denotes variable y</param>
         /// <returns>it returns multiplication of two values</returns>
-        public int Multiply(int x, int y)
+        public double Multiply(double x, double y)
         {
             return x * y;
         }

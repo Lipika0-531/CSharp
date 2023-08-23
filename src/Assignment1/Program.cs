@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 namespace Assignment1
 {
@@ -15,20 +16,22 @@ namespace Assignment1
         {
             Console.WriteLine("Enter the number (X) : ");
             string? input1 = Console.ReadLine();
-            if (string.IsNullOrEmpty(input1))
+            string pattern = "^[0-9]+$";
+            while (string.IsNullOrWhiteSpace(input1) || !Regex.IsMatch(input1, pattern))
             {
-                Console.WriteLine("value can't be empty! Input your value once more");
+                Console.WriteLine("value must be numbers Input your value once more");
                 input1 = Console.ReadLine();
             }
+
             Console.WriteLine("Enter the number (Y) : ");
             string? input2 = Console.ReadLine();
-            if (string.IsNullOrEmpty(input2))
+            while (string.IsNullOrWhiteSpace(input2) || !Regex.IsMatch(input2, pattern))
             {
                 Console.WriteLine("value can't be empty! Input your value once more");
-                input1 = Console.ReadLine();
+                input2 = Console.ReadLine();
             }
-            int.TryParse(input1, out int x);
-            int.TryParse(input2, out int y);
+            double.TryParse(input1, out double x);
+            double.TryParse(input2, out double y);
             MathUtils myobj = new MathUtils();
             Console.WriteLine($"Addition: {myobj.Add(x, y)}");
             Console.WriteLine($"Subtraction: {myobj.Subtract(x, y)}");
@@ -41,7 +44,7 @@ namespace Assignment1
             catch (DivideByZeroException)
             {
                 Console.WriteLine($"Cannot divide by zero");
-            }     
+            }
         }
     }
 }

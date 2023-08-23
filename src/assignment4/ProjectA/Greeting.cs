@@ -2,6 +2,8 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+using System.Text.RegularExpressions;
+
 namespace ProjectA
 {
     /// <summary>
@@ -18,6 +20,12 @@ namespace ProjectA
             string? name;
             Console.WriteLine("Enter your Name");
             name = Console.ReadLine();
+            string pattern = "^[A-Za-z]+$";
+            while (string.IsNullOrWhiteSpace(name) || !Regex.IsMatch(name, pattern))
+            {
+                Console.WriteLine("Value can't be empty, reenter it");
+                name = Console.ReadLine()!;
+            }
             Console.WriteLine($"Welcome to Math World! {name}");
         }
     }

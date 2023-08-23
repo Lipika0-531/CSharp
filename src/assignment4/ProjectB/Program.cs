@@ -26,7 +26,14 @@ namespace ProjectB
             Console.WriteLine("For Addition");
             Add();
             Console.WriteLine("For Division");
-            Divide();
+            try
+            {
+                Divide();
+            }
+            catch (DivideByZeroException)
+            {
+                Console.WriteLine($"Cannot divide by zero");
+            }
             Console.WriteLine("For Subtraction");
             Subtract();
             Console.WriteLine("For Multiplication");
@@ -78,10 +85,13 @@ namespace ProjectB
         {
             int x = ProjectCommon.Program.GetInputs("Enter x value");
             int y = ProjectCommon.Program.GetInputs("Enter y value");
-            ProjectC.Program.Print($"division of {x} and {y} is {x / y}");
             if (y == 0)
             {
                 throw new DivideByZeroException();
+            }
+            else
+            {
+                ProjectC.Program.Print($"division of {x} and {y} is {x / y}");
             }
         }
     }

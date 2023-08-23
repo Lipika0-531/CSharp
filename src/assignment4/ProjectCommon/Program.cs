@@ -2,6 +2,8 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+using System.Text.RegularExpressions;
+
 namespace ProjectCommon
 {
     /// <summary>
@@ -40,7 +42,8 @@ namespace ProjectCommon
             Console.WriteLine(msg);
             int x;
             string? input1 = Console.ReadLine();
-            if (string.IsNullOrEmpty(input1))
+            string pattern = "^[0-9]+$";
+            while (string.IsNullOrWhiteSpace(input1) || !Regex.IsMatch(input1, pattern))
             {
                 Console.WriteLine("value can't be empty! Input your value once more");
                 input1 = Console.ReadLine();

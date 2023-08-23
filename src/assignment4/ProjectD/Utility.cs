@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// <copyright file="Utility.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ProjectD
 {
@@ -19,7 +17,7 @@ namespace ProjectD
         {
             string? name;
             Console.WriteLine("Enter your Name : ");
-            name = Console.ReadLine()!;
+            name = Console.ReadLine() !;
             return name;
         }
     }

@@ -19,28 +19,41 @@ namespace ProjectB
         }
 
         /// <summary>
+        /// MathematicalOperation()
+        /// </summary>
+        public static void MathematicalOperation()
+        {
+            Console.WriteLine("For Addition");
+            Add();
+            Console.WriteLine("For Division");
+            Divide();
+            Console.WriteLine("For Subtraction");
+            Subtract();
+            Console.WriteLine("For Multiplication");
+            Multiply();
+            ProjectC.Program.Addition();
+        }
+
+        /// <summary>
         /// Add function will perform addition operation
         /// </summary>
         /// <param name="x">x denotes variable x</param>
         /// <param name="y">y denotes variable y</param>
-        /// <returns>it returns x + y</returns>
-        public long Add()
-        { 
-            int x = ProjectCommon.Program.GetInputs("Enter x value");
-            int y = ProjectCommon.Program.GetInputs("Enter y value");
-            return (long)x + y;
+        public static void Add()
+        {
+            ProjectC.Program.Print($"addition result is {ProjectCommon.Program.Add()}");
         }
+
         /// <summary>
         /// Subtraction method would subtract two values
         /// </summary>
         /// <param name="x">x denotes variable x</param>
         /// <param name="y">y denotes variable y</param>
-        /// <returns>subtract</returns>
-        public long Subtract()
+        public static void Subtract()
         {
             int x = ProjectCommon.Program.GetInputs("Enter x value");
             int y = ProjectCommon.Program.GetInputs("Enter y value");
-            return (long)x - y;
+            ProjectC.Program.Print($"subtraction of {x} and {y} is {x - y}");
         }
 
         /// <summary>
@@ -48,12 +61,12 @@ namespace ProjectB
         /// </summary>
         /// <param name="x">x denotes variable x</param>
         /// <param name="y">y denotes variable y</param>
-        /// 
-        public void Multiply()
+        ///
+        public static void Multiply()
         {
             int x = ProjectCommon.Program.GetInputs("Enter x value");
             int y = ProjectCommon.Program.GetInputs("Enter y value");
-            
+            ProjectC.Program.Print($"multiplication of {x} and {y} is {x * y}");
         }
 
         /// <summary>
@@ -61,17 +74,15 @@ namespace ProjectB
         /// </summary>
         /// <param name="x">x denotes variable x</param>
         /// <param name="y">y denotes variable y</param>
-        /// <returns>it returns division of two values</returns>
-        public double Divide()
+        public static void Divide()
         {
             int x = ProjectCommon.Program.GetInputs("Enter x value");
             int y = ProjectCommon.Program.GetInputs("Enter y value");
+            ProjectC.Program.Print($"division of {x} and {y} is {x / y}");
             if (y == 0)
             {
                 throw new DivideByZeroException();
             }
-
-            return x / y;
         }
     }
 }

@@ -23,14 +23,16 @@ namespace ProjectC
         /// <param name="name">name</param>
         public static void Print(string name)
         {
-            string? uppercase = ProjectD.Utility.Display();
-            uppercase = uppercase.ToUpper();
-            Console.WriteLine($"The Name you entered is {uppercase} ");
+            Console.WriteLine($"{name}");
         }
 
-        /*public static void MethodCall()
+        /// <summary>
+        /// Add two integers
+        /// </summary>
+        public static void Addition()
         {
-            Con*//*sole.WriteLine($"Addition: {ProjectB.Program.add()}");
-        }*/
+            Console.WriteLine($"The addition of two numbers is {ProjectCommon.Program.Add()}");
+            ProjectE.Program.Name();
+        }
     }
 }

@@ -17,8 +17,7 @@ namespace ProjectA
         {
             Greeting greet = new Greeting();
             greet.GreetingMsg();
-            ProjectB.Program.Add();
-            
+            ProjectB.Program.MathematicalOperation();
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Assignment7
         private List<int[]> memAlloc = new List<int[]>();
 #pragma warning restore SX1309 // Field names should begin with underscore
         /// <summary>
-        /// Allocate method is iniatiated
+        /// Allocate method is iniatiated to allocate the memory
         /// </summary>
         public void Allocate()
         {
@@ -30,7 +30,7 @@ namespace Assignment7
             {
                 Console.WriteLine(ex.Message);
             }
-            finally 
+            finally
             {
                 Console.WriteLine("Due to memory leak, we have to delete the first 2 task, Enter Y is proceed and N to exit");
                 string? value = Console.ReadLine();

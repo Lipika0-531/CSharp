@@ -10,7 +10,7 @@ namespace Assignment7
     internal class Program
     {
         /// <summary>
-        /// Main class
+        /// Main class is initiated
         /// </summary>
         /// <param name="args">arguments</param>
         public static void Main(string[] args)

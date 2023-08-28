@@ -1,5 +1,7 @@
 # SIMPLE PROJECT WITH GIT IN VISUAL STUDIO
 
+## GitHub repository link for the assignment 
+https://github.com/Lipika-Maadeswaran/GitAssignment.git
  
 
 ### TASK 1 : SETTING UP ENVIRONMENT

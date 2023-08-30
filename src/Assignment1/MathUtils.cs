@@ -1,4 +1,8 @@
-﻿namespace Assignment1
+﻿// <copyright file="MathUtils.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+namespace Assignment1
 {
     /// <summary>
     /// MathUtils Class
@@ -13,18 +17,20 @@
         /// <returns>it returns x + y</returns>
         public double Add(double x, double y)
         {
-            return (long)x + y;
+            return x + y;
         }
+
         /// <summary>
-        /// Subtraction method would subtract two values 
+        /// Subtraction method would subtract two values
         /// </summary>
         /// <param name="x">x denotes variable x</param>
         /// <param name="y">y denotes variable y</param>
         /// <returns>subtract</returns>
         public double Subtract(double x, double y)
         {
-            return (long)x - y;
+            return x - y;
         }
+
         /// <summary>
         /// Multiply method would multiply two values
         /// </summary>
@@ -35,6 +41,7 @@
         {
             return x * y;
         }
+
         /// <summary>
         /// Divide method will divide the two values
         /// </summary>
@@ -43,10 +50,11 @@
         /// <returns>it returns division of two values</returns>
         public double Divide(double x, double y)
         {
-            if ( y == 0)
+            if(y == 0)
             {
                 throw new DivideByZeroException();
             }
+
             return x / y;
         }
     }

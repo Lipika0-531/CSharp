@@ -1,5 +1,6 @@
-﻿using System.Text.RegularExpressions;
-using System.Xml.Linq;
+﻿// <copyright file="Program.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace Assignment1
 {
@@ -16,22 +17,22 @@ namespace Assignment1
         {
             Console.WriteLine("Enter the number (X) : ");
             string? input1 = Console.ReadLine();
-            string pattern = "^[0-9]+$";
-            while (string.IsNullOrWhiteSpace(input1) || !Regex.IsMatch(input1, pattern))
+            double x;
+            while (!double.TryParse(input1, out x))
             {
-                Console.WriteLine("value must be numbers Input your value once more");
+                Console.Write("Input your value once again : ");
                 input1 = Console.ReadLine();
             }
 
             Console.WriteLine("Enter the number (Y) : ");
             string? input2 = Console.ReadLine();
-            while (string.IsNullOrWhiteSpace(input2) || !Regex.IsMatch(input2, pattern))
+            double y;
+            while (!double.TryParse(input2, out y))
             {
-                Console.WriteLine("value can't be empty! Input your value once more");
+                Console.Write("Input your value once again : ");
                 input2 = Console.ReadLine();
             }
-            double.TryParse(input1, out double x);
-            double.TryParse(input2, out double y);
+
             MathUtils myobj = new MathUtils();
             Console.WriteLine($"Addition: {myobj.Add(x, y)}");
             Console.WriteLine($"Subtraction: {myobj.Subtract(x, y)}");

@@ -12,7 +12,7 @@ internal class Menu
     /// <summary>
     /// List named _people is iniatiated to store the details
     /// </summary>
-    private List<Person> _people = new ();
+    private List<Person> _people = new();
 
     /// <summary>
     /// MainMenu :Display options.
@@ -91,50 +91,120 @@ internal class Menu
     }
 
     /// <summary>
+    /// Regexvalidation method would validate the inputs entered
+    /// </summary>
+    /// <param name="res">variable that has user inputs</param>
+    /// <returns>validated input</returns>
+    public string RegexvalidationAlphabet(string res)
+    {
+        string pattern = "^[A-Za-z]+$";
+        while (string.IsNullOrEmpty(res) || !Regex.IsMatch(res, pattern))
+        {
+            Console.WriteLine("Enter valid values!");
+            res = Console.ReadLine()!;
+        }
+
+        return res;
+    }
+
+    /// <summary>
+    /// RegexvalidationNumber would validate the numbers
+    /// </summary>
+    /// <param name="res">variable that has user inputs</param>
+    /// <returns>validated input</returns>
+    public string RegexvalidationNumber(string res)
+    {
+        string pattern = "^[0-9]+$";
+        while (string.IsNullOrEmpty(res) || !Regex.IsMatch(res, pattern) || res.Length < 10 || res.Length! > 10)
+        {
+            Console.WriteLine("Enter valid numbers!");
+            res = Console.ReadLine();
+        }
+        return res;
+    }
+
+    /// <summary>
+    /// RegexvalidationEmail would validate the numbers
+    /// </summary>
+    /// <param name="res">variable that has user inputs</param>
+    /// <returns>validated input</returns>
+    public string RegexvalidationEmail(string res)
+    {
+        string pattern = "^[^@]+@[^@]+$";
+        while (string.IsNullOrEmpty(res) || !Regex.IsMatch(res, pattern))
+        {
+            Console.WriteLine("Enter valid email!");
+            res = Console.ReadLine();
+        }
+        return res;
+    }
+
+    /// <summary>
+    /// RegexvalidationEmail would validate the numbers
+    /// </summary>
+    /// <param name="des">variable that has user inputs</param>
+    /// <returns>validated input</returns>
+    public string ValidationSpace(string des)
+    {
+        while (string.IsNullOrWhiteSpace(des))
+        {
+            Console.WriteLine("value can't be empty! Input your value once more");
+            des = Console.ReadLine()!;
+        }
+        return des;
+    }
+
+    /// <summary>
     /// Add a new person to the list.
     /// </summary>
     public void AddPerson()
     {
         Console.WriteLine("Please Enter The Person's Name: ");
-        string pattern = "^[A-Za-z]+$";
-        string result = Console.ReadLine() !;
-        while (string.IsNullOrEmpty(result) || !Regex.IsMatch(result, pattern))
-        {
-            Console.WriteLine("Enter valid names!");
-            result = Console.ReadLine() !;
-        }
-
+        string result = Console.ReadLine()!;
+        result = this.RegexvalidationAlphabet(result);
         Console.WriteLine("Please Enter The Mobile Number: ");
-        var num = Console.ReadLine();
-        pattern = "^[0-9]+$";
-        while (string.IsNullOrEmpty(num) || !Regex.IsMatch(num, pattern) || num.Length < 10 || num.Length! > 10)
-        {
-            Console.WriteLine("Enter valid numbers!");
-            num = Console.ReadLine();
-        }
-
+        string? num = Console.ReadLine()!;
+        num = this.RegexvalidationNumber(num);
         Console.WriteLine("Please Enter The Email: ");
-        var email = Console.ReadLine();
-        pattern = "^[^@]+@[^@]+$";
-        while (string.IsNullOrEmpty(email) || !Regex.IsMatch(email, pattern))
-        {
-            Console.WriteLine("Enter valid email!");
-            email = Console.ReadLine();
-        }
-
+        string? email = Console.ReadLine()!;
+        email = this.RegexvalidationEmail(email);
         Console.WriteLine("Please enter the Description: ");
-        string desp = Console.ReadLine() !;
-        while (string.IsNullOrEmpty(desp))
+        string desp = Console.ReadLine()!;
+        desp = this.ValidationSpace(desp);
+        if (IsAlreadyExist(result, num, email))
         {
-            Console.WriteLine("value can't be empty! Input your value once more");
-            desp = Console.ReadLine() !;
+            Console.WriteLine("The Contact Info already exist..");
+            Console.WriteLine("Enter new value");
+            this.AddPerson();
         }
-
-        Person newPerson = new Person(result, num, email, desp);
-        this._people.Add(newPerson);
-        Console.WriteLine(newPerson.Name + " " + newPerson.Number + " added successfully.\n\n");
+        else
+        {
+            Person newPerson = new Person(result, num, email, desp);
+            this._people.Add(newPerson);
+            Console.WriteLine(newPerson.Name + " " + newPerson.Number + " added successfully.\n\n");
+        }
         this.MainMenu();
         return;
+    }
+
+    /// <summary>
+    /// IsalreadyExist method would check whether the value entered is already exists in the list
+    /// </summary>
+    /// <param name="result">result</param>
+    /// <param name="num">num</param>
+    /// <param name="email">email</param>
+    /// <returns>boolean value if the value already exists</returns>
+    public bool IsAlreadyExist(string result, string num, string email)
+    {
+        foreach (Person person in this._people)
+        {
+            if (result.Equals(person.Name) && num.Equals(person.Number) && email.Equals(person.Email))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /// <summary>
@@ -145,13 +215,8 @@ internal class Menu
     public int SearchListContacts(bool mainMenu)
     {
         Console.WriteLine("Search : ");
-        var result = Console.ReadLine();
-        while (string.IsNullOrWhiteSpace(result))
-        {
-            Console.WriteLine("value can't be empty! Input your value once more");
-            result = Console.ReadLine();
-        }
-
+        string? result = Console.ReadLine() !;
+        this.ValidationSpace(result);
         var searchResults = this._people.Where(n => n.Name.Contains(result, StringComparison.OrdinalIgnoreCase)).ToList();
         var searchNumber = this._people.Where(n => n.Number.Contains(result, StringComparison.OrdinalIgnoreCase)).ToList();
         if (searchResults.Count == 0 && searchNumber.Count == 0)
@@ -184,16 +249,16 @@ internal class Menu
     /// <summary>
     /// Edit the details of the user by name, email, number
     /// </summary>
-    /// <param name="isDel">boolean</param>
-    public void Getchoice(bool isDel)
+    /// <param name="isDeleted">boolean</param>
+    public void Getchoice(bool isDeleted)
     {
-        if (isDel == false)
+        if (isDeleted == false)
         {
             Console.WriteLine("Please Enter which details to be edited: ");
             Console.WriteLine("1.Name");
             Console.WriteLine("2.Phone Number");
             Console.WriteLine("3.Email");
-            Console.WriteLine("4.Exit"); 
+            Console.WriteLine("4.Exit");
             int value;
             while (!int.TryParse(Console.ReadLine(), out value))
             {
@@ -228,14 +293,11 @@ internal class Menu
                             if (this._people.Count >= editid)
                             {
                                 Console.WriteLine("Enter your name");
-                                var editname = Console.ReadLine() !;
-                                while (string.IsNullOrWhiteSpace(editname))
-                                {
-                                    Console.WriteLine("value can't be empty! Input your value once more");
-                                    editname = Console.ReadLine();
-                                }
+                                var editname = Console.ReadLine()!;
+                                this.ValidationSpace(editname);
 
                                 this._people[editid - 1].Name = editname;
+                                Console.WriteLine("Edited successfuly");
                             }
                         }
 
@@ -265,15 +327,10 @@ internal class Menu
                                 {
                                     Console.WriteLine("Enter your number");
 
-                                    var editnum = Console.ReadLine();
-                                    string pattern = "^[0-9]+$";
-                                    while (string.IsNullOrEmpty(editnum) || !Regex.IsMatch(editnum, pattern) || editnum.Length < 10 || editnum.Length! > 10)
-                                    {
-                                        Console.WriteLine("Enter valid numbers!");
-                                        editnum = Console.ReadLine();
-                                    }
-
+                                    string? editnum = Console.ReadLine()!;
+                                    this.RegexvalidationNumber(editnum);
                                     this._people[editid - 1].Number = editnum;
+                                    Console.WriteLine("Edited successfuly");
                                 }
                             }
                         }
@@ -304,13 +361,10 @@ internal class Menu
                                 {
                                     Console.WriteLine("Enter your email");
                                     var editmail = Console.ReadLine();
-                                    while (string.IsNullOrWhiteSpace(editmail))
-                                    {
-                                        Console.WriteLine("value can't be empty! Input your value once more");
-                                        editmail = Console.ReadLine();
-                                    }
+                                    this.ValidationSpace(editmail);
 
                                     this._people[editid - 1].Email = editmail;
+                                    Console.WriteLine("Edited successfuly");
                                 }
                             }
                         }
@@ -337,7 +391,7 @@ internal class Menu
         }
         else
         {
-            if (isDel)
+            if (isDeleted)
             {
                 int count = this.SearchListContacts(false);
                 if (count > 0)
@@ -361,6 +415,7 @@ internal class Menu
                     if (this._people.Count >= delid)
                     {
                         this._people.Remove(this._people[delid - 1]);
+                        Console.WriteLine("Id deleted successfully");
                     }
                 }
             }

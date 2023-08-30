@@ -2,10 +2,10 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-using System.Text.RegularExpressions;
-
 namespace ProjectD
 {
+    using System.Text.RegularExpressions;
+
     /// <summary>
     /// Utility class is base class
     /// </summary>
@@ -26,6 +26,7 @@ namespace ProjectD
                 Console.WriteLine("Value can't be empty, reenter it");
                 name = Console.ReadLine() !;
             }
+
             return name;
         }
     }

@@ -2,10 +2,10 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-using System.Text.RegularExpressions;
-
 namespace ProjectCommon
 {
+    using System.Text.RegularExpressions;
+
     /// <summary>
     /// Program class
     /// </summary>

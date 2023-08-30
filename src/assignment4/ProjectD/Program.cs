@@ -15,8 +15,6 @@ namespace ProjectD
         /// <param name="args">string arguments</param>
         public static void Main(string[] args)
         {
-            /*Utility disp = new Utility();
-            disp.Display();*/
         }
     }
 }

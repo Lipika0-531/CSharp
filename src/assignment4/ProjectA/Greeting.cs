@@ -2,10 +2,10 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-using System.Text.RegularExpressions;
-
 namespace ProjectA
 {
+    using System.Text.RegularExpressions;
+
     /// <summary>
     /// Greeting class would send greeting message
     /// </summary>
@@ -24,8 +24,9 @@ namespace ProjectA
             while (string.IsNullOrWhiteSpace(name) || !Regex.IsMatch(name, pattern))
             {
                 Console.WriteLine("Value can't be empty, reenter it");
-                name = Console.ReadLine()!;
+                name = Console.ReadLine() !;
             }
+
             Console.WriteLine($"Welcome to Math World! {name}");
         }
     }

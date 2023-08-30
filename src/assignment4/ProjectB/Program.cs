@@ -34,6 +34,7 @@ namespace ProjectB
             {
                 Console.WriteLine($"Cannot divide by zero");
             }
+
             Console.WriteLine("For Subtraction");
             Subtract();
             Console.WriteLine("For Multiplication");

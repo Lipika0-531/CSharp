@@ -45,8 +45,8 @@
 
 ### Before build order change
 
-![Before build order change](./Dependancy_images/![Alt text](afterbuildorder.PNG))
+![Before build order change](./Dependancy_images/afterbuildorder.PNG)
 
 ### After build order changed
 
-![Before build order change](./Dependancy_images/![Alt text](buildorder.PNG))
+![After build order change](./Dependancy_images/buildorder.PNG)

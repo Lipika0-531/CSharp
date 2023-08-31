@@ -9,8 +9,6 @@ namespace Assignment7
     /// </summary>
     public class Menu
     {
-        internal int id;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Menu"/> class.
         /// Menu

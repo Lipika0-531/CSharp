@@ -25,11 +25,16 @@ namespace Assignment7
             Console.WriteLine("The value of valuetype and referencetype after the method called");
             Tasks.Print(menu, valuetype);
             Tasks tasks = new Tasks();
+            Console.WriteLine("Press any key to view Stack memory");
+            Console.ReadKey();
+            Tasks.ArrayInteger();
+            Console.WriteLine("Press any key to view Heap memory");
             Console.ReadKey();
             Tasks.Largearr();
             Console.ReadKey();
-            Tasks.ArrayInteger();
+            Console.WriteLine("Press any key to enter garbage collection");
             Console.ReadKey();
+            GarbageCollection.Garbage();
         }
     }
 
@@ -45,7 +50,7 @@ namespace Assignment7
         /// <param name="valuetype">valuetype</param>
         public static void Modify(Menu menu, int valuetype)
         {
-            menu.id += 1;
+            menu.Id += 1;
             menu.Name = "xiabao";
         }
 
@@ -56,7 +61,7 @@ namespace Assignment7
         /// <param name="valuetype">valuetype</param>
         public static void Print(Menu menu, int valuetype)
         {
-            Console.WriteLine($"The id is: {menu.id}");
+            Console.WriteLine($"The id is: {menu.Id}");
             Console.WriteLine($"The Name is: {menu.Name}");
             Console.WriteLine($"The valuetype is: {valuetype}");
         }
@@ -64,7 +69,7 @@ namespace Assignment7
         /// <summary>
         /// Largearr
         /// </summary>
-        public static void Largearr()
+        public static void ArrayInteger()
         {
             int a = 0;
             int b = 1;
@@ -78,15 +83,15 @@ namespace Assignment7
             int j = 9;
             int k = 10;
             int l = 11;
-            Thread.Sleep(1000);
+            Console.WriteLine("Press any key to exit stack memory");
             Console.ReadKey();
-            Console.WriteLine($"1: {a}\n2: {b}\n3: {c}4: {d}5: {e}\n6: {f}\n7: {g}\n8: {h}\n9: {i}\n10: {j}\n11: {k}\n12: {l}");
+            Console.WriteLine($"1: {a}\n2: {b}\n3: {c}\n4: {d}\n5: {e}\n6: {f}\n7: {g}\n8: {h}\n9: {i}\n10: {j}\n11: {k}\n12: {l}");
         }
 
         /// <summary>
         /// ArrayInteger
         /// </summary>
-        public static void ArrayInteger()
+        public static void Largearr()
         {
             int[] a = new int[100];
             for (int i = 1; i < a.Length; i++)
@@ -96,7 +101,30 @@ namespace Assignment7
                 Console.WriteLine(a[i]);
             }
 
+            Console.WriteLine("Press any key to exit heap memory");
             Console.ReadKey();
+        }
+    }
+
+    /// <summary>
+    /// GarbageCollection class which contains a method to implement garbage collection
+    /// </summary>
+    public class GarbageCollection
+    {
+        /// <summary>
+        /// Garbage method creates and destroys a large number of objects
+        /// </summary>
+        public static void Garbage()
+        {
+            for (int i=0; i<100000; i++)
+            {
+                object obj = new object();
+                obj = null;
+            }
+
+            Console.WriteLine("press any key to start GC...");
+            Console.ReadKey();
+            GC.Collect();
         }
     }
 }

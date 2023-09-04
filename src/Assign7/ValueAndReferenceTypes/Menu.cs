@@ -2,7 +2,7 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-namespace Assignment7
+namespace ValueAndReferenceTypes
 {
     /// <summary>
     /// Menu class

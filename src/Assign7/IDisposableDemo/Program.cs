@@ -17,7 +17,6 @@ namespace IDisposableDemo
         /// <param name="args">arguments</param>
         public static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
             using (Idisposable idisposable = new Idisposable())
             {
                 idisposable.Filewrite();

@@ -20,26 +20,24 @@ namespace Assignment5_task3
             string numbervalidation = @"^(?!-)[0-9]+$";
             Console.WriteLine("Enter the account number : ");
             string accnum = Console.ReadLine() !;
-            accnum = validationMethods.RegexValidation(accnum, numbervalidation)
+            accnum = validationMethods.RegexValidation(accnum, numbervalidation);
 
             SavingsAccount savingsAccount = new SavingsAccount(accnum, 500);
             CheckingAccount checkingAccount = new CheckingAccount(accnum, 500);
 
-            Console.WriteLine("Choice :");
-            string userinput = Console.ReadLine();
+            Console.WriteLine("\n1. Savings Account \n2. Checking Account \nEnter Choice : ");
+            string userinput = Console.ReadLine() !;
             int.TryParse(userinput, out int choice);
             switch (choice)
             {
                 case 1:
                     Console.WriteLine("Enter the amount to be deposited : ");
-                    string amtDeposited = Console.ReadLine()!;
+                    string amtDeposited = Console.ReadLine() !;
                     amtDeposited = validationMethods.RegexValidation(amtDeposited, numbervalidation);
                     decimal depositedAmt = decimal.Parse(amtDeposited);
                     savingsAccount.Deposit(depositedAmt);
-
-
                     Console.WriteLine("Enter the amount to withdraw : ");
-                    string withdrawAmt = Console.ReadLine()!;
+                    string withdrawAmt = Console.ReadLine() !;
                     withdrawAmt = validationMethods.RegexValidation(withdrawAmt, numbervalidation);
                     decimal withdrawAmtSaving = decimal.Parse(withdrawAmt);
                     savingsAccount.Withdraw(withdrawAmtSaving);
@@ -50,18 +48,18 @@ namespace Assignment5_task3
                 case 2:
 
                     Console.WriteLine("Enter the amount to be deposited : ");
-                    string despositedamt = Console.ReadLine()!;
+                    string despositedamt = Console.ReadLine() !;
                     despositedamt = validationMethods.RegexValidation(despositedamt, numbervalidation);
                     decimal amttobedeposited = decimal.Parse(despositedamt);
                     checkingAccount.Deposit(amttobedeposited);
-                    
                     Console.WriteLine("Enter the amount to withdraw : ");
-                    string amtToWithdraw = Console.ReadLine()!;
+                    string amtToWithdraw = Console.ReadLine() !;
                     amtToWithdraw = validationMethods.RegexValidation(amtToWithdraw, numbervalidation);
                     decimal withdrawAmtCurrentAcc = decimal.Parse(amtToWithdraw);
                     checkingAccount.Withdraw(withdrawAmtCurrentAcc);
 
                     Console.WriteLine($"Balance {savingsAccount.Balance}");
+                    break;
             }
         }
     }

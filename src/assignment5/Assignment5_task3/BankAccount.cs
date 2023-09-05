@@ -39,7 +39,7 @@ namespace Assignment5_task3
         /// <param name="amount">decimal amount</param>
         public void Deposit(decimal amount)
         {
-            if(amount < 0)
+            if (amount < 0)
             {
                 Console.WriteLine("Cannot deposit");
             }

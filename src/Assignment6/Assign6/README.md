@@ -22,7 +22,7 @@ https://github.com/Lipika-Maadeswaran/GitAssignment.git
 - Pushed the local repository to GitHub.
 
  
-    <p>
+<p>
     <img src="Images/repo.png" width="500" height="300" alt="Creating repo"/>
 </p>
 
@@ -32,7 +32,7 @@ https://github.com/Lipika-Maadeswaran/GitAssignment.git
 
    
 
-    <p>
+<p>
     <img src="Images/commit.png" width="500" height="700" alt="Initial commit" />
 </p>
 
@@ -48,7 +48,7 @@ https://github.com/Lipika-Maadeswaran/GitAssignment.git
 
  
 
-     <p>
+<p>
     <img src="Images/stage.png" width="500" height="500" alt="stage all"/>
 </p>
 
@@ -61,7 +61,7 @@ https://github.com/Lipika-Maadeswaran/GitAssignment.git
 - Commit has been created locally using Git Changes window with a meaningful commit message.
 
   
-     <p>
+<p>
     <img src="Images/commit.png" width="500" height="550" alt="changes commit"/>
 </p>
 
@@ -77,7 +77,7 @@ https://github.com/Lipika-Maadeswaran/GitAssignment.git
 - New Branch has been created and checked out of master branch.
 
  
-     <p>
+<p>
     <img src="Images/branch.png" width="500" height="300" alt="created new branch"/>
 </p>
 
@@ -109,7 +109,7 @@ https://github.com/Lipika-Maadeswaran/GitAssignment.git
 
    
 
-   <p>
+<p>
     <img src="Images/mergeconf.png" width="600" height="300" alt="merge conflict"/>
 </p>
 
@@ -146,7 +146,7 @@ https://github.com/Lipika-Maadeswaran/GitAssignment.git
 - We can also view changes made in individual commit by clicking on the commit.
 
  
-     <p>
+<p>
     <img src="Images/history.png" width="600" height="300" alt="Git history"/>
 </p>
 
@@ -161,7 +161,7 @@ https://github.com/Lipika-Maadeswaran/GitAssignment.git
 
 - In the git changes window there is an option to make selective staging.
 
-    <p>
+<p>
     <img src="Images/selectivestage.png" width="500" height="600" alt="selective staging"/>
 </p>
 
@@ -174,7 +174,7 @@ https://github.com/Lipika-Maadeswaran/GitAssignment.git
 
 - The stages have be completed
 
-     <p>
+<p>
     <img src="Images/stage.png" width="500" height="600" alt="selective staging"/>
 </p>
 

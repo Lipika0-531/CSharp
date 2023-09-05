@@ -161,7 +161,7 @@ https://github.com/Lipika-Maadeswaran/GitAssignment.git
 
 - In the git changes window there is an option to make selective staging.
 
-    <p>
+   <p>
     <img src="Images/selectivestage.png" width="500" height="600" alt="selective staging"/>
 </p>
 

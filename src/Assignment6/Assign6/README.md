@@ -22,8 +22,9 @@ https://github.com/Lipika-Maadeswaran/GitAssignment.git
 - Pushed the local repository to GitHub.
 
  
-
-    ![Created new repo](repo.png)
+    <p>
+    <img src="Images/repo.png" width="500" height="300" alt="Creating repo"/>
+</p>
 
  
 
@@ -31,7 +32,9 @@ https://github.com/Lipika-Maadeswaran/GitAssignment.git
 
    
 
-    ![Initial commit](commit.png)
+    <p>
+    <img src="Images/commit.png" width="500" height="700" alt="Initial commit" />
+</p>
 
  
 
@@ -45,7 +48,9 @@ https://github.com/Lipika-Maadeswaran/GitAssignment.git
 
  
 
-    ![stage all](stage.png)
+     <p>
+    <img src="Images/stage.png" width="500" height="500" alt="stage all"/>
+</p>
 
  
 
@@ -55,9 +60,11 @@ https://github.com/Lipika-Maadeswaran/GitAssignment.git
 
 - Commit has been created locally using Git Changes window with a meaningful commit message.
 
- 
+  
+     <p>
+    <img src="Images/commit.png" width="500" height="550" alt="changes commit"/>
+</p>
 
-    ![changes commit](commit.png) 
 
   
 
@@ -70,8 +77,9 @@ https://github.com/Lipika-Maadeswaran/GitAssignment.git
 - New Branch has been created and checked out of master branch.
 
  
-
-    ![created new branch](branch.png)
+     <p>
+    <img src="Images/branch.png" width="500" height="300" alt="created new branch"/>
+</p>
 
  
 
@@ -80,8 +88,6 @@ https://github.com/Lipika-Maadeswaran/GitAssignment.git
 - Pushed the local repository to GitHub.
 
  
-
-    <!-- ![merge using PR](img/branch_mod.png) -->
 
  
 
@@ -103,7 +109,10 @@ https://github.com/Lipika-Maadeswaran/GitAssignment.git
 
    
 
-   ![merge conflict](mergeconf.PNG)
+   <p>
+    <img src="Images/mergeconf.png" width="600" height="300" alt="merge conflict"/>
+</p>
+
 
  
 
@@ -111,11 +120,18 @@ https://github.com/Lipika-Maadeswaran/GitAssignment.git
 
  
 
-     ![merge resolve](mergeresolve.PNG)
+<p>
+    <img src="Images/mergeresolve.png" width="600" height="300" alt="merge resolve"/>
+</p>
 
-  ![merge resolve](resolved.PNG)
+<p>
+    <img src="Images/resolved.png" width="600" height="300" alt="merge resolve"/>
+</p>
 
-    ![changes commit history](commithistory.png)
+<p>
+    <img src="Images/commithistory.png" width="600" height="300" alt="changes commit history"/>
+</p>
+
 
  
 
@@ -130,8 +146,10 @@ https://github.com/Lipika-Maadeswaran/GitAssignment.git
 - We can also view changes made in individual commit by clicking on the commit.
 
  
+     <p>
+    <img src="Images/history.png" width="600" height="300" alt="Git history"/>
+</p>
 
-     ![Git history](history.png)
 
 
 
@@ -143,17 +161,23 @@ https://github.com/Lipika-Maadeswaran/GitAssignment.git
 
 - In the git changes window there is an option to make selective staging.
 
-     ![selective staging](selectivestage.png)
+    <p>
+    <img src="Images/selectivestage.png" width="500" height="600" alt="selective staging"/>
+</p>
 
     
 
- 
+<p>
+    <img src="Images/staging.png" width="500" height="600" alt="selective staging"/>
+</p>
 
-    ![selective staging](staging.png)
 
 - The stages have be completed
 
-    ![selective staging](stage.png)
+     <p>
+    <img src="Images/stage.png" width="500" height="600" alt="selective staging"/>
+</p>
+
     
 ### CONCLUSION
 

@@ -1,11 +1,11 @@
-﻿// <copyright _file="Program.cs" company="PlaceholderCompany">
+﻿// <copyright file="Program.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-using System.Text;
-
 namespace IDisposableDemo
 {
+    using System.Text;
+
     /// <summary>
     /// Program class is initiated for IDisposable class
     /// </summary>
@@ -26,7 +26,7 @@ namespace IDisposableDemo
             FileStream file = System.IO.File.OpenRead(path);
             byte[] buf = new byte[1024];
             int c;
-            while ((c = file.Read(buf, 0, buf.Length )) >0)
+            while ((c = file.Read(buf, 0, buf.Length)) > 0)
             {
                 Console.WriteLine(Encoding.UTF8.GetString(buf, 0, c));
             }

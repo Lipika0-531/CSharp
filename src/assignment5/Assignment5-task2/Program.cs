@@ -22,10 +22,9 @@ namespace Assignment5_task2
             string numbervalidation = @"^(?!-)[0-9]+$";
             string alphabetvalidation = "^[A-Za-z]+$";
 
-            string name = null!;
             Console.WriteLine("Enter the Name of the Manager : ");
-            string? result = Console.ReadLine() !;
-            result = validationMethods.RegexValidation(result, alphabetvalidation);
+            string name = Console.ReadLine() !;
+            name = validationMethods.RegexValidation(name, alphabetvalidation);
 
             decimal salary;
             Console.WriteLine("Enter the Salary of the Manager: ");

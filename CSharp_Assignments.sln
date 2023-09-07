@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assign7", "Assign7", "{27F4
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Assignment7", "src\Assign7\Assignment7\Assignment7.csproj", "{4C0C1A50-3235-4015-9560-FB3D4B9B4384}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDisposableDemo", "src\Assign7\IDisposableDemo\IDisposableDemo.csproj", "{AE875A52-D112-4356-9A6E-D8CCFAEBB700}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IDisposableDemo", "src\Assign7\IDisposableDemo\IDisposableDemo.csproj", "{AE875A52-D112-4356-9A6E-D8CCFAEBB700}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GarbageCollection", "src\Assign7\GarbageCollection\GarbageCollection.csproj", "{FE8F9DF7-5828-4293-A56C-9AB2E8A0F1E5}"
 EndProject

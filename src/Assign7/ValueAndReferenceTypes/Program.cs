@@ -1,4 +1,8 @@
-﻿namespace ValueAndReferenceTypes
+﻿// <copyright file="Program.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+namespace ValueAndReferenceTypes
 {
     /// <summary>
     /// Program class for ValueAndReferenceTypes

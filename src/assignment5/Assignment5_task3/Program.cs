@@ -19,11 +19,11 @@ namespace Assignment5_task3
 
             string numbervalidation = @"^(?!-)[0-9]+$";
             Console.WriteLine("Enter the account number : ");
-            string accnum = Console.ReadLine() !;
-            accnum = validationMethods.RegexValidation(accnum, numbervalidation);
+            string accountnumber = Console.ReadLine() !;
+            accountnumber = validationMethods.RegexValidation(accountnumber, numbervalidation);
 
-            SavingsAccount savingsAccount = new SavingsAccount(accnum, 500);
-            CheckingAccount checkingAccount = new CheckingAccount(accnum, 500);
+            SavingsAccount savingsAccount = new SavingsAccount(accountnumber, 500);
+            CheckingAccount checkingAccount = new CheckingAccount(accountnumber, 500);
 
             Console.WriteLine("\n1. Savings Account \n2. Checking Account \nEnter Choice : ");
             string userinput = Console.ReadLine() !;
@@ -48,9 +48,9 @@ namespace Assignment5_task3
                 case 2:
 
                     Console.WriteLine("Enter the amount to be deposited : ");
-                    string despositedamt = Console.ReadLine() !;
-                    despositedamt = validationMethods.RegexValidation(despositedamt, numbervalidation);
-                    decimal amttobedeposited = decimal.Parse(despositedamt);
+                    string despositedamount = Console.ReadLine() !;
+                    despositedamount = validationMethods.RegexValidation(despositedamount, numbervalidation);
+                    decimal amttobedeposited = decimal.Parse(despositedamount);
                     checkingAccount.Deposit(amttobedeposited);
                     Console.WriteLine("Enter the amount to withdraw : ");
                     string amtToWithdraw = Console.ReadLine() !;

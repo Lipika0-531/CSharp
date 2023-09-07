@@ -32,6 +32,7 @@ namespace Assignment5_task3
             if (this.Balance - amount < 500)
             {
                 Console.WriteLine("Withdrawal could not be done when the current balance is below the minimum balance.");
+                return;
             }
 
             this.Balance -= amount;

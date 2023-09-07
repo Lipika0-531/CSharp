@@ -32,23 +32,23 @@ namespace Assignment5_task2
             results = validationMethods.RegexValidation(results, numbervalidation);
 
             salary = decimal.Parse(results);
-            Manager emp = new Manager(name, salary);
-            int empbonus = emp.CalculateBonus();
-            emp.PrintDetails(empbonus);
+            Manager employee = new Manager(name, salary);
+            int empoyeebonus = employee.CalculateBonus();
+            employee.PrintDetails(empoyeebonus);
 
             Console.WriteLine("Enter the Name of the Developer : ");
-            string? resultn = Console.ReadLine() !;
-            resultn = validationMethods.RegexValidation(resultn, alphabetvalidation);
+            string? resultDeveloper = Console.ReadLine() !;
+            resultDeveloper = validationMethods.RegexValidation(resultDeveloper, alphabetvalidation);
 
             decimal salaryDeveloper;
             Console.WriteLine("Enter the Salary of the Developer: ");
-            string? resultdeveloper = Console.ReadLine() !;
-            resultdeveloper = validationMethods.RegexValidation(resultdeveloper, numbervalidation);
+            string? resultSalary = Console.ReadLine() !;
+            resultSalary = validationMethods.RegexValidation(resultSalary, numbervalidation);
 
-            salaryDeveloper = decimal.Parse(resultdeveloper);
-            Developer develop = new Developer (salaryDeveloper, resultn);
-            int devBonus = develop.CalculateBonus();
-            develop.PrintDetails(devBonus);
+            salaryDeveloper = decimal.Parse(resultSalary);
+            Developer develop = new Developer (salaryDeveloper, resultDeveloper);
+            int developerBonus = develop.CalculateBonus();
+            develop.PrintDetails(developerBonus);
         }
     }
 }

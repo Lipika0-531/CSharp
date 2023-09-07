@@ -17,7 +17,7 @@ namespace Assignment5_task1
         {
             ValidationMethods validationMethods = new ValidationMethods();
 
-            string numbervalidation = @"^(?!-)[0-9.]+$";
+            string numbervalidation = @"^(?!-)[0-9]+$";
             string alphabetvalidation = "^[A-Za-z]+$";
             double radius;
 
@@ -36,22 +36,22 @@ namespace Assignment5_task1
 
             double length;
             Console.Write("Enter the length of the Rectangle : ");
-            string? resultl = Console.ReadLine() !;
-            resultl = validationMethods.RegexValidation(resultl, numbervalidation);
-            length = double.Parse(resultl);
+            string? resultlength = Console.ReadLine() !;
+            resultlength = validationMethods.RegexValidation(resultlength, numbervalidation);
+            length = double.Parse(resultlength);
 
             double breadth;
             Console.Write("Enter the breadth of the Rectangle : ");
-            string? resultb = Console.ReadLine() !;
-            resultb = validationMethods.RegexValidation(resultb, numbervalidation);
-            breadth = double.Parse(resultb);
+            string? resultbreadth = Console.ReadLine() !;
+            resultbreadth = validationMethods.RegexValidation(resultbreadth, numbervalidation);
+            breadth = double.Parse(resultbreadth);
 
             Console.Write("Enter the color of the Rectangle : ");
-            string? reccolor = Console.ReadLine() !;
-            validationMethods.RegexValidation(reccolor, alphabetvalidation);
-            Rectangle rectangle = new Rectangle(length, breadth, reccolor);
-            double rectarea = rectangle.CalculateArea();
-            rectangle.PrintDetails(rectarea, reccolor);
+            string? rectangleColor = Console.ReadLine() !;
+            validationMethods.RegexValidation(rectangleColor, alphabetvalidation);
+            Rectangle rectangle = new Rectangle(length, breadth, rectangleColor);
+            double rectangleArea = rectangle.CalculateArea();
+            rectangle.PrintDetails(rectangleArea, rectangleColor);
         }
     }
 }

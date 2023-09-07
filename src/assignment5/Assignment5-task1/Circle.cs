@@ -45,7 +45,7 @@ namespace Assignment5_task1
         /// <param name="color">string color</param>
         public void PrintDetails(double area, string color)
         {
-            Console.WriteLine($"The color of the Circle is {color}");
+            Console.WriteLine($"The Color of the Circle is {color}");
             Console.WriteLine($"Radius of the Circle is {area}");
         }
     }

@@ -33,8 +33,8 @@ namespace Assignment5_task2
 
             salary = decimal.Parse(results);
             Manager employee = new Manager(name, salary);
-            int empoyeebonus = employee.CalculateBonus();
-            employee.PrintDetails(empoyeebonus);
+            int employeebonus = employee.CalculateBonus();
+            employee.PrintDetails(employeebonus);
 
             Console.WriteLine("Enter the Name of the Developer : ");
             string? resultDeveloper = Console.ReadLine() !;

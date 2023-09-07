@@ -17,7 +17,7 @@ namespace Assignment5_task1
         {
             ValidationMethods validationMethods = new ValidationMethods();
 
-            string numbervalidation = @"^(?!-)[0-9]+$";
+            string numbervalidation = @"^(?!-)[0-9]+[.]?[0-9]*$";
             string alphabetvalidation = "^[A-Za-z]+$";
             double radius;
 

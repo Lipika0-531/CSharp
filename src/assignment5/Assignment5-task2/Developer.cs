@@ -25,7 +25,7 @@ namespace Assignment5_task2
             : base(name)
         {
             this.NameDeveloper = name;
-            this.SalaryDev = salary;
+            this.SalaryDeveloper = salary;
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Assignment5_task2
         /// <value>
         /// Decimal
         /// </value>
-        public decimal SalaryDev { get; set; }
+        public decimal SalaryDeveloper { get; set; }
 
         /// <summary>
         /// Gets or sets the Name of the developer
@@ -50,7 +50,7 @@ namespace Assignment5_task2
         /// <returns> Bonus amount </returns>
         public override int CalculateBonus()
         {
-            return Convert.ToInt32(this.SalaryDev * (decimal)_bonus);
+            return Convert.ToInt32(this.SalaryDeveloper * (decimal)_bonus);
         }
 
         /// <summary>
@@ -59,9 +59,9 @@ namespace Assignment5_task2
         /// <param name="bonus">float bonus</param>
         public void PrintDetails(float bonus)
         {
-            Console.WriteLine($"The name of the Developer is : {this.NameDeveloper}");
-            Console.WriteLine($"Salary of {this.NameDeveloper} is : {this.SalaryDev}");
-            Console.WriteLine($"The amount of bonus added is :  {bonus}");
+            Console.WriteLine($"The Name of the Developer is : {this.NameDeveloper}");
+            Console.WriteLine($"Salary of {this.NameDeveloper} is : {this.SalaryDeveloper}");
+            Console.WriteLine($"The Amount of bonus added is :  {bonus}");
         }
     }
 }

@@ -19,8 +19,8 @@ namespace Assignment5_task1
         public Rectangle(double length, double breadth, string color)
             : base(color)
         {
-            this.RectLen = length;
-            this.RectBreadth = breadth;
+            this.RectangleLength = length;
+            this.RectangleBreadth = breadth;
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace Assignment5_task1
         /// <value>
         /// length of rectangle
         /// </value>
-        public double RectLen { get; set; }
+        public double RectangleLength { get; set; }
 
         /// <summary>
         /// gets or sets method would get and set breadth of the rectangle
@@ -37,7 +37,7 @@ namespace Assignment5_task1
         /// <value>
         /// breadth of rectangle
         /// </value>
-        public double RectBreadth { get; set; }
+        public double RectangleBreadth { get; set; }
 
         /// <summary>
         /// CalculateArea() would calculate the area of the rectangle
@@ -45,7 +45,7 @@ namespace Assignment5_task1
         /// <returns>arguments</returns>
         public override double CalculateArea()
         {
-            return this.RectLen * this.RectBreadth;
+            return this.RectangleLength * this.RectangleBreadth;
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace Assignment5_task1
         /// <param name="color">string color</param>
         public void PrintDetails(double area, string color)
         {
-            Console.WriteLine($"The color of the Rectangle is {color}");
+            Console.WriteLine($"The Color of the Rectangle is {color}");
             Console.WriteLine($"Area of the Rectangle is {area}");
         }
     }

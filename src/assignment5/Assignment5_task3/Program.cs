@@ -18,9 +18,11 @@ namespace Assignment5_task3
             ValidationMethods validationMethods = new ValidationMethods();
 
             string numbervalidation = @"^(?!-)[0-9]+$";
-            Console.WriteLine("Enter the account number : ");
-            string accountnumber = Console.ReadLine()!;
-            accountnumber = validationMethods.RegexValidation(accountnumber, numbervalidation);
+            string accountNoValidation = @"^(?!-)[a-zA-z]*[0-9]+$";
+            string depositAmount = @"^(?!-)[1-9]+$";
+            Console.WriteLine("Enter the account number: ");
+            string accountnumber = Console.ReadLine() !;
+            accountnumber = validationMethods.RegexValidation(accountnumber, accountNoValidation);
 
             SavingsAccount savingsAccount = new SavingsAccount(accountnumber, 500);
             CheckingAccount checkingAccount = new CheckingAccount(accountnumber, 500);
@@ -39,7 +41,7 @@ namespace Assignment5_task3
                         Console.ForegroundColor = ConsoleColor.White;
                         Console.WriteLine("Enter the amount to be deposited : ");
                         string amtDeposited = Console.ReadLine()!;
-                        amtDeposited = validationMethods.RegexValidation(amtDeposited, numbervalidation);
+                        amtDeposited = validationMethods.RegexValidation(amtDeposited, depositAmount);
                         decimal depositedAmt = decimal.Parse(amtDeposited);
                         savingsAccount.Deposit(depositedAmt);
                         Console.ForegroundColor = ConsoleColor.Red;

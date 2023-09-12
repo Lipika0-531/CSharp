@@ -17,38 +17,38 @@ namespace Assignment5_task1
         {
             ValidationMethods validationMethods = new ValidationMethods();
 
-            string numbervalidation = @"^(?!-)[0-9]+[.]?[0-9]*$";
-            string alphabetvalidation = "^[A-Za-z]+$";
+            string numberValidation = @"^(?!-)[0-9]+[.]?[0-9]*$";
+            string alphabetValidation = "^[A-Za-z]+$";
             double radius;
 
             Console.Write("Enter the radius of the circle : ");
             string? result = Console.ReadLine() !;
-            result = validationMethods.RegexValidation(result, numbervalidation);
+            result = validationMethods.RegexValidation(result, numberValidation);
             radius = double.Parse(result);
 
             Console.Write("Enter the color of the circle : ");
-            string? resultcolor = Console.ReadLine() !;
-            resultcolor = validationMethods.RegexValidation(resultcolor, alphabetvalidation);
+            string? resultColor = Console.ReadLine() !;
+            resultColor = validationMethods.RegexValidation(resultColor, alphabetValidation);
 
-            Circle circle = new Circle(radius, resultcolor);
+            Circle circle = new Circle(radius, resultColor);
             double area = circle.CalculateArea();
-            circle.PrintDetails(area, resultcolor);
+            circle.PrintDetails(area, resultColor);
 
             double length;
             Console.Write("Enter the length of the Rectangle : ");
-            string? resultlength = Console.ReadLine() !;
-            resultlength = validationMethods.RegexValidation(resultlength, numbervalidation);
-            length = double.Parse(resultlength);
+            string? resultLength = Console.ReadLine() !;
+            resultLength = validationMethods.RegexValidation(resultLength, numberValidation);
+            length = double.Parse(resultLength);
 
             double breadth;
             Console.Write("Enter the breadth of the Rectangle : ");
-            string? resultbreadth = Console.ReadLine() !;
-            resultbreadth = validationMethods.RegexValidation(resultbreadth, numbervalidation);
-            breadth = double.Parse(resultbreadth);
+            string? resultBreadth = Console.ReadLine() !;
+            resultBreadth = validationMethods.RegexValidation(resultBreadth, numberValidation);
+            breadth = double.Parse(resultBreadth);
 
             Console.Write("Enter the color of the Rectangle : ");
             string? rectangleColor = Console.ReadLine() !;
-            validationMethods.RegexValidation(rectangleColor, alphabetvalidation);
+            validationMethods.RegexValidation(rectangleColor, alphabetValidation);
             Rectangle rectangle = new Rectangle(length, breadth, rectangleColor);
             double rectangleArea = rectangle.CalculateArea();
             rectangle.PrintDetails(rectangleArea, rectangleColor);

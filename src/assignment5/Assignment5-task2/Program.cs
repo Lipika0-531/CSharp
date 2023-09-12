@@ -19,31 +19,31 @@ namespace Assignment5_task2
         {
             ValidationMethods validationMethods = new ValidationMethods();
 
-            string numbervalidation = @"^(?!-)[0-9]+$";
-            string alphabetvalidation = "^[A-Za-z]+$";
+            string numberValidation = @"^(?!-)[0-9]+$";
+            string alphabetValidation = "^[A-Za-z]+$";
 
             Console.WriteLine("Enter the Name of the Manager : ");
             string name = Console.ReadLine() !;
-            name = validationMethods.RegexValidation(name, alphabetvalidation);
+            name = validationMethods.RegexValidation(name, alphabetValidation);
 
             decimal salary;
             Console.WriteLine("Enter the Salary of the Manager: ");
             string? results = Console.ReadLine() !;
-            results = validationMethods.RegexValidation(results, numbervalidation);
+            results = validationMethods.RegexValidation(results, numberValidation);
 
             salary = decimal.Parse(results);
             Manager employee = new Manager(name, salary);
-            int employeebonus = employee.CalculateBonus();
-            employee.PrintDetails(employeebonus);
+            int employeeBonus = employee.CalculateBonus();
+            employee.PrintDetails(employeeBonus);
 
             Console.WriteLine("Enter the Name of the Developer : ");
             string? resultDeveloper = Console.ReadLine() !;
-            resultDeveloper = validationMethods.RegexValidation(resultDeveloper, alphabetvalidation);
+            resultDeveloper = validationMethods.RegexValidation(resultDeveloper, alphabetValidation);
 
             decimal salaryDeveloper;
             Console.WriteLine("Enter the Salary of the Developer: ");
             string? resultSalary = Console.ReadLine() !;
-            resultSalary = validationMethods.RegexValidation(resultSalary, numbervalidation);
+            resultSalary = validationMethods.RegexValidation(resultSalary, numberValidation);
 
             salaryDeveloper = decimal.Parse(resultSalary);
             Developer develop = new Developer (salaryDeveloper, resultDeveloper);

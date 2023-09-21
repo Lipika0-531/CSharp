@@ -18,7 +18,7 @@ namespace IDisposableDemo
         /// </summary>
         public Idisposable()
         {
-            var path = "Best.txt";
+            var path = @"D:\CSharp\src\Assign7\IDisposableDemo\bin\Debug\net6.0\Best.txt";
             _file = System.IO.File.OpenWrite(path);
         }
 

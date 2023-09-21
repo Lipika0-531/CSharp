@@ -18,6 +18,7 @@ namespace ValueAndReferenceTypes
         {
             menu.Id += 1;
             menu.Name = "xiabao";
+            valuetype = 7;
         }
 
         /// <summary>

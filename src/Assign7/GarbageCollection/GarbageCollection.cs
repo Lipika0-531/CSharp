@@ -1,5 +1,6 @@
-﻿// <copyright file="Program.cs" company="PlaceholderCompany">
+﻿// <copyright file="GarbageCollection.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace GarbageCollection
 {

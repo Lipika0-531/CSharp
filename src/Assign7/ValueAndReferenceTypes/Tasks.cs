@@ -10,27 +10,27 @@ namespace ValueAndReferenceTypes
     public class Tasks
     {
         /// <summary>
-        /// Modify method accepts valuetype as a input
+        /// Modify method accepts valueType as a input
         /// </summary>
         /// <param name="menu">class menu would set id and name</param>
-        /// <param name="valuetype">sets the variable as valuetype</param>
-        public static void Modify(Menu menu, int valuetype)
+        /// <param name="valueType">sets the variable as valueType</param>
+        public static void Modify(Menu menu, int valueType)
         {
             menu.Id += 1;
             menu.Name = "xiabao";
-            valuetype = 7;
+            valueType = 7;
         }
 
         /// <summary>
-        /// Print method would print the valuetype variables
+        /// Print method would print the valueType variables
         /// </summary>
         /// <param name="menu">class menu would set id and name </param>
-        /// <param name="valuetype">sets the variable as valuetype</param>
-        public static void Print(Menu menu, int valuetype)
+        /// <param name="valueType">sets the variable as valueType</param>
+        public static void Print(Menu menu, int valueType)
         {
             Console.WriteLine($"The id is: {menu.Id}");
             Console.WriteLine($"The Name is: {menu.Name}");
-            Console.WriteLine($"The valuetype is: {valuetype}");
+            Console.WriteLine($"The valueType is: {valueType}");
         }
 
         /// <summary>
@@ -56,9 +56,9 @@ namespace ValueAndReferenceTypes
         }
 
         /// <summary>
-        /// Largearr method defined to view heap memory
+        /// LargeArray method defined to view heap memory
         /// </summary>
-        public static void Largearr()
+        public static void LargeArray()
         {
             int[] a = new int[100];
             for (int i = 1; i < a.Length; i++)

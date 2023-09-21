@@ -30,7 +30,7 @@ namespace ValueAndReferenceTypes
             Tasks.ArrayInteger();
             Console.WriteLine("Press any key to view Heap memory");
             Console.ReadKey();
-            Tasks.Largearr();
+            Tasks.LargeArray();
             Console.WriteLine("press any key to Exit..");
             Console.ReadKey();
         }

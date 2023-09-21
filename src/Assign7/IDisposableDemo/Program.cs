@@ -19,7 +19,7 @@ namespace IDisposableDemo
         {
             using (Idisposable idisposable = new Idisposable())
             {
-                idisposable.Filewrite();
+                idisposable.FileWrite();
             }
 
             var path = @"D:\CSharp\src\Assign7\IDisposableDemo\bin\Debug\net6.0\Best.txt";

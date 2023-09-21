@@ -19,7 +19,7 @@ namespace IDisposableDemo
         public Idisposable()
         {
             var path = @"D:\CSharp\src\Assign7\IDisposableDemo\bin\Debug\net6.0\Best.txt";
-            _file = System.IO.File.OpenWrite(path);
+            this._file = System.IO.File.OpenWrite(path);
         }
 
         /// <summary>
@@ -27,14 +27,14 @@ namespace IDisposableDemo
         /// </summary>
         public void Dispose()
         {
-            _file.Close();
+            this._file.Close();
             Console.WriteLine("Dispose method executed");
         }
 
         /// <summary>
-        /// Filewrite method would write the _file
+        /// FileWrite method would write the _file
         /// </summary>
-        public void Filewrite()
+        public void FileWrite()
         {
             Console.WriteLine("Enter the text to be entered in the _file");
             string? text = Console.ReadLine();
@@ -45,7 +45,7 @@ namespace IDisposableDemo
             }
 
             byte[] bytes = Encoding.UTF8.GetBytes(text);
-            _file.Write(bytes, 0, bytes.Length);
+            this._file.Write(bytes, 0, bytes.Length);
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("The entered text was successfully written");
             Console.ForegroundColor = ConsoleColor.White;

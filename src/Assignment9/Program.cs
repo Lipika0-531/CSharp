@@ -129,15 +129,15 @@ namespace Assignment9
                 throw new InvalidUserInputException("invalid exception", new Exception());
             }
 
-            int[] arr = new int[10];
-            int add = 0;
-            if (index < arr.Length)
+            int[] array = new int[10];
+            int sum = 0;
+            if (index < array.Length)
             {
                 for (int i = 0; i < index; i++)
                 {
-                    arr[i] = i;
-                    add += arr[i];
-                    Console.WriteLine(arr[i]);
+                    array[i] = i;
+                    sum += array[i];
+                    Console.WriteLine(array[i]);
                 }
             }
             else
@@ -145,7 +145,7 @@ namespace Assignment9
                 throw new IndexOutOfRangeException();
             }
 
-            return add;
+            return sum;
         }
     }
 }

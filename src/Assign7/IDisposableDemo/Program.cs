@@ -22,7 +22,7 @@ namespace IDisposableDemo
                 idisposable.FileWrite();
             }
 
-            var path = @"D:\CSharp\src\Assign7\IDisposableDemo\bin\Debug\net6.0\Best.txt";
+            var path = Directory.GetCurrentDirectory() + @"\Best.txt";
             FileStream file = System.IO.File.OpenRead(path);
             byte[] buf = new byte[1024];
             int c;

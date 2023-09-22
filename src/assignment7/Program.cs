@@ -15,9 +15,9 @@ namespace Assignment7
         /// <param name="args">Console Line arguments</param>
         public static void Main(string[] args)
         {
-            MemoryEater me = new MemoryEater();
-            me.Allocate();
-            Console.WriteLine("Completed!");
+            MemoryEater memoryEater = new MemoryEater();
+            memoryEater.Allocate();
+            Console.WriteLine("Completed!\nPress any key to Exit");
             Console.ReadKey();
         }
     }

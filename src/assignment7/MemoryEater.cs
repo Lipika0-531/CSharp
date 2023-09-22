@@ -45,6 +45,10 @@ namespace Assignment7
                 {
                     Environment.Exit(0);
                 }
+                else
+                {
+                    Console.WriteLine("Since value entered was invalid ! \nDefault option is considered as NO");
+                }
             }
         }
     }

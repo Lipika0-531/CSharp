@@ -54,14 +54,14 @@ namespace Assignment9
         {
             Console.WriteLine("Task 1: Understanding and Using try/catch/finally blocks");
             Console.WriteLine("Enter x value :");
-            int x = Convert.ToInt32(Console.ReadLine());
+            int input1 = Convert.ToInt32(Console.ReadLine());
             Console.WriteLine("Enter y value :");
-            int y = Convert.ToInt32(Console.ReadLine());
+            int input2 = Convert.ToInt32(Console.ReadLine());
             Operations operations = new Operations();
             double value;
             try
             {
-                value = Operations.Divide(x, y);
+                value = Operations.Divide(input1, input2);
                 Console.WriteLine($"Result : {value}");
             }
             catch (DivideByZeroException)
@@ -97,18 +97,18 @@ namespace Assignment9
         /// <summary>
         /// Divide exception
         /// </summary>
-        /// <param name="x">x</param>
-        /// <param name="y">y</param>
+        /// <param name="input1">x</param>
+        /// <param name="input2">y</param>
         /// <returns>exception</returns>
         /// <exception cref="DivideByZeroException">exception.</exception>
-        public static double Divide(int x, int y)
+        public static double Divide(int input1, int input2)
         {
-            if (y == 0)
+            if (input2 == 0)
             {
                 throw new DivideByZeroException();
             }
 
-            return x / y;
+            return input1 / input2;
         }
 
         /// <summary>

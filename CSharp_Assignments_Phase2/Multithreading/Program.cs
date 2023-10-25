@@ -38,6 +38,7 @@ namespace Multithreading
                 threadB.Start();
                 threadC.Start();
                 threadD.Start();
+
                 threadA.Join();
                 threadB.Join();
                 threadC.Join();

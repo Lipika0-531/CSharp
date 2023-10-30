@@ -67,7 +67,6 @@ namespace ExpenseTrackerConsoleApplication
                                 Console.WriteLine($"Active Users : {activeUsers.UserName}");
                             }
 
-                            fileManager.WriteUserDetailsToFile(user);
                             break;
                         case 3:
                             if (ActiveUsers.ActiveUsersList.Contains(user))
@@ -182,7 +181,7 @@ namespace ExpenseTrackerConsoleApplication
                         case 13:
                             if (ActiveUsers.ActiveUsersList.Contains(user))
                             {
-                                parser.DisplayMessages("Sign Out !", 4);
+                                parser.DisplayMessages("Signing Out !", 4);
                                 SignOut signOut = new SignOut();
                                 await signOut.SignOutFromUserList(user);
                                 parser.DisplayMessages("Successfully Signed Out !");
@@ -194,6 +193,8 @@ namespace ExpenseTrackerConsoleApplication
 
                             break;
                         case 14:
+                            fileManager.WriteUserDetailsToFile(user);
+
                             ActiveUsers.ActiveUsersList.Clear();
                             ActiveUsers.ActiveUsersList.Clear();
 

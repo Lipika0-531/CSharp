@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
@@ -105,12 +106,13 @@ namespace ExpenseTrackerConsoleApplication
         public void ViewTotalIncome(User user)
         {
             double totalIncome = 0;
-            if (user.Incomes != null && user.Expenses.Count > 0)
+            if (user.Incomes != null && user.Incomes.Count > 0)
             {
                 foreach (var value in this.Incomes)
                 {
                     totalIncome += value.Amount;
                 }
+
                 parser.DisplayMessages($"Total Income: {totalIncome}");
             }
             else

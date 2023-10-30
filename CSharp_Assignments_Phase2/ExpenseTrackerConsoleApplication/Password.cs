@@ -21,7 +21,7 @@ namespace ExpenseTrackerConsoleApplication
             this.EncodedPassword = EncodePassword(value);
         }
 
-        private string EncodedPassword { get; set; }
+        public string EncodedPassword { get; set; }
 
 
         /// <summary>

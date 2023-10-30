@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,13 +13,18 @@ namespace ExpenseTrackerConsoleApplication
     /// </summary>
     internal class FileManager
     {
-        private string userDetailsFile = "UserDetails.json";
         public void WriteUserDetailsToFile(User user)
         {
-            using (StreamWriter writer = File.AppendText(userDetailsFile))
+            string userDetailsFile = $"{user.UserName}.json";
+
+            using (FileStream writer = File.Create(userDetailsFile))
             {
-                var encodedPassword = user.Password.EncodePassword;
-                writer.WriteLine($"{user.UserName},{encodedPassword} ");
+                using (StreamWriter sw = new StreamWriter(writer))
+                {
+                    var encodedPassword = user.Password.EncodedPassword;
+                    string jsonUserData = JsonConvert.SerializeObject(user);
+                    sw.Write(jsonUserData);
+                }
             }
         }
 

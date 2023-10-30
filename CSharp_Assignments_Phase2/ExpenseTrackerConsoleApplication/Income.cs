@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MoneyManagerConsoleApplication
+namespace ExpenseTrackerConsoleApplication
 {
     /// <summary>
     /// Income of the User.
@@ -13,7 +13,7 @@ namespace MoneyManagerConsoleApplication
     internal class Income : Transaction
     {
         /// <summary>
-        /// Initializing Constructor for Income.
+        /// Initializes a new instance of the <see cref="Income"/> class.
         /// </summary>
         /// <param name="date">Date</param>
         /// <param name="category">Category</param>

@@ -5,18 +5,30 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MoneyManagerConsoleApplication
+namespace ExpenseTrackerConsoleApplication
 {
+    /// <summary>
+    /// Encode and Decode Password.
+    /// </summary>
     internal class Password
     {
+        /// <summary>
+        /// EncodedPassword.
+        /// </summary>
+        /// <param name="value">Value</param>
         public Password(string value)
         {
-            this.EncodedPassword= EncodePassword(value);
+            this.EncodedPassword = EncodePassword(value);
         }
 
         private string EncodedPassword { get; set; }
 
 
+        /// <summary>
+        /// Encode Password.
+        /// </summary>
+        /// <param name="value">password</param>
+        /// <returns>encoded password</returns>
         public string EncodePassword(string value)
         {
             byte[] bytes = new byte[value.Length];
@@ -25,6 +37,10 @@ namespace MoneyManagerConsoleApplication
             return encodedPassword;
         }
 
+        /// <summary>
+        /// Decode Password.
+        /// </summary>
+        /// <param name="value">password</param>
         public void Decodepassword(string value)
         {
             byte[] secret = Convert.FromBase64String(value);
@@ -33,6 +49,11 @@ namespace MoneyManagerConsoleApplication
             var decodedPassword = encoding.GetString(plain);
         }
 
+        /// <summary>
+        /// Check password with encodedPassword.
+        /// </summary>
+        /// <param name="password">Password</param>
+        /// <returns>bool</returns>
         public bool PasswordChecker(string password)
         {
             var encodedPassword = EncodePassword(password);

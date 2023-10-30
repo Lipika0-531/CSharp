@@ -4,24 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MoneyManagerConsoleApplication
+namespace ExpenseTrackerConsoleApplication
 {
     /// <summary>
-    /// Represents User LogOut.
+    /// Signing Out.
     /// </summary>
-    internal class LogOut
+    internal class SignOut
     {
         Parser parser = new Parser();
 
         /// <summary>
-        /// User LogOut.
+        /// Signing Out From User List.
         /// </summary>
-        /// <param name="userName">UserName</param>
-        /// <param name="password">Password</param>
+        /// <param name="user">User</param>
         /// <returns>Task</returns>
-        public async Task LogOutUser(User user)
+        public async Task SignOutFromUserList(User user)
         {
-            if(ActiveUsers.ActiveUsersList.Contains(user))
+            if (ActiveUsers.ActiveUsersList.Contains(user))
             {
                 int i = 0;
                 await Task.Run(() =>
@@ -33,7 +32,7 @@ namespace MoneyManagerConsoleApplication
                         i++;
                     }
                     ActiveUsers.ActiveUsersList.Remove(user);
-                    parser.DisplayMessages($"Successfully Logged out ! \n ThankYou {user.UserName}", 5);
+                    SignIn.users.Remove(user.UserName);
 
                     Thread.Sleep(100);
                 });
@@ -43,7 +42,7 @@ namespace MoneyManagerConsoleApplication
             {
                 parser.DisplayMessages("No User found !");
             }
-            
+
             return;
         }
     }

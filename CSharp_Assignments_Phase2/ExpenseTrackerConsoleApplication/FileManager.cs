@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
-namespace MoneyManagerConsoleApplication
+namespace ExpenseTrackerConsoleApplication
 {
     /// <summary>
     /// Adding and Reading Files.

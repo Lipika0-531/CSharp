@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MoneyManagerConsoleApplication
+namespace ExpenseTrackerConsoleApplication
 {
     /// <summary>
     /// Contains menu to be displayed.
@@ -43,7 +43,7 @@ namespace MoneyManagerConsoleApplication
                         "8. Update Income \n" +
                         "9. Delete Expense \n" +
                         "10. Delete Income \n" +
-                        "11. Statistics " +
+                        "11. Statistics \n" +
                         "12. LogOut \n" +
                         "13. SignOut \n" +
                         "14. Exit", 1);
@@ -72,7 +72,7 @@ namespace MoneyManagerConsoleApplication
                         case 3:
                             if (ActiveUsers.ActiveUsersList.Contains(user))
                             {
-                                parser.DisplayMessages("Add Expense",4);
+                                parser.DisplayMessages("Add Expense", 4);
                                 Expense expenseToAdd = services.GetInputsForExpense();
                                 user?.AddExpense(expenseToAdd);
                             }
@@ -85,7 +85,7 @@ namespace MoneyManagerConsoleApplication
                         case 4:
                             if (ActiveUsers.ActiveUsersList.Contains(user))
                             {
-                                parser.DisplayMessages("Add Income !",4);
+                                parser.DisplayMessages("Add Income !", 4);
                                 Income incomeToAdd = services.GetInputsForIncome();
                                 user?.AddIncome(incomeToAdd);
                             }
@@ -97,7 +97,7 @@ namespace MoneyManagerConsoleApplication
                         case 5:
                             if (ActiveUsers.ActiveUsersList.Contains(user))
                             {
-                                parser.DisplayMessages("View Expense ",4);
+                                parser.DisplayMessages("View Expense ", 4);
                                 user?.ViewExpense(user);
                             }
                             else
@@ -108,7 +108,7 @@ namespace MoneyManagerConsoleApplication
                         case 6:
                             if (ActiveUsers.ActiveUsersList.Contains(user))
                             {
-                                parser.DisplayMessages("View Income ",4);
+                                parser.DisplayMessages("View Income ", 4);
                                 user?.ViewIncome(user);
                             }
                             else
@@ -139,7 +139,6 @@ namespace MoneyManagerConsoleApplication
                         case 9:
                             if (ActiveUsers.ActiveUsersList.Contains(user))
                             {
-                                parser.DisplayMessages("Delete Expense !",4);
                                 user?.DeleteExpense(user);
                             }
                             else
@@ -150,7 +149,6 @@ namespace MoneyManagerConsoleApplication
                         case 10:
                             if (ActiveUsers.ActiveUsersList.Contains(user))
                             {
-                                parser.DisplayMessages("Delete Income !",4);
                                 user?.DeleteIncome(user);
                             }
                             else
@@ -161,9 +159,7 @@ namespace MoneyManagerConsoleApplication
                         case 11:
                             if (ActiveUsers.ActiveUsersList.Contains(user))
                             {
-                                parser.DisplayMessages("Total Expenses !");
                                 user?.ViewTotalExpense(user);
-                                parser.DisplayMessages("Total Incomes !");
                                 user?.ViewTotalIncome(user);
                             }
                             else
@@ -174,7 +170,7 @@ namespace MoneyManagerConsoleApplication
                         case 12:
                             if (ActiveUsers.ActiveUsersList.Contains(user))
                             {
-                                parser.DisplayMessages("Logging out !",4);
+                                parser.DisplayMessages("Logging out !", 4);
                                 LogOut logOut = new LogOut();
                                 await logOut.LogOutUser(user);
                             }
@@ -186,7 +182,7 @@ namespace MoneyManagerConsoleApplication
                         case 13:
                             if (ActiveUsers.ActiveUsersList.Contains(user))
                             {
-                                parser.DisplayMessages("Sign Out !",4);
+                                parser.DisplayMessages("Sign Out !", 4);
                                 SignOut signOut = new SignOut();
                                 await signOut.SignOutFromUserList(user);
                                 parser.DisplayMessages("Successfully Signed Out !");
@@ -194,7 +190,7 @@ namespace MoneyManagerConsoleApplication
                             else
                             {
                                 parser.DisplayMessages("Login or SignUp !");
-                            }   
+                            }
 
                             break;
                         case 14:
@@ -209,9 +205,9 @@ namespace MoneyManagerConsoleApplication
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-               parser.DisplayMessages($"Error: {ex}");
+                parser.DisplayMessages($"Error: {ex}");
             }
         }
     }

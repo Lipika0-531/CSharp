@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MoneyManagerConsoleApplication
+namespace ExpenseTrackerConsoleApplication
 {
     /// <summary>
     /// Expense of the User.
@@ -13,7 +13,6 @@ namespace MoneyManagerConsoleApplication
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Expense"/> class.
-        /// Initializing Constructor for expense.
         /// </summary>
         /// <param name="date">Date</param>
         /// <param name="category">Category</param>

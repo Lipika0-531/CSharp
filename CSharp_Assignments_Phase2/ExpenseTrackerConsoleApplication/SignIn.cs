@@ -4,12 +4,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MoneyManagerConsoleApplication
+namespace ExpenseTrackerConsoleApplication
 {
+    /// <summary>
+    /// User SignIn.
+    /// </summary>
     internal class SignIn
-    {        
+    {
         Parser parser = new Parser();
+
+        /// <summary>
+        /// users will have user list.
+        /// </summary>
         public static Dictionary<string, User> users = new Dictionary<string, User>();
+
+        /// <summary>
+        /// Add user.
+        /// </summary>
+        /// <param name="userName">userName</param>
+        /// <param name="password">Password</param>
+        /// <returns>Added User</returns>
         public User UserSignIn(string userName, string password)
         {
             var addUser = new User(userName, password);
@@ -18,6 +32,11 @@ namespace MoneyManagerConsoleApplication
             return addUser;
         }
 
+        /// <summary>
+        /// Check userName is unique.
+        /// </summary>
+        /// <param name="userName">userName</param>
+        /// <returns>string</returns>
         public string CheckIfUserNameUnique(string userName)
         {
             while (users.ContainsKey(userName))

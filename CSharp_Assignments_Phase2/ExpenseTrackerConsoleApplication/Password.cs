@@ -10,8 +10,12 @@ namespace ExpenseTrackerConsoleApplication
     /// <summary>
     /// Encode and Decode Password.
     /// </summary>
-    internal class Password
+    public class Password
     {
+        public Password()
+        {
+                
+        }
         /// <summary>
         /// EncodedPassword.
         /// </summary>
@@ -35,18 +39,6 @@ namespace ExpenseTrackerConsoleApplication
             bytes = Encoding.UTF8.GetBytes(value);
             var encodedPassword = Convert.ToBase64String(bytes, 0, bytes.Length);
             return encodedPassword;
-        }
-
-        /// <summary>
-        /// Decode Password.
-        /// </summary>
-        /// <param name="value">password</param>
-        public void Decodepassword(string value)
-        {
-            byte[] secret = Convert.FromBase64String(value);
-            byte[] plain = ProtectedData.Unprotect(secret, null, DataProtectionScope.CurrentUser);
-            var encoding = new UTF8Encoding();
-            var decodedPassword = encoding.GetString(plain);
         }
 
         /// <summary>

@@ -6,46 +6,50 @@ namespace ExpenseTrackerConsoleApplication
     /// <summary>
     /// Income and Expense services.
     /// </summary>
-    internal class Services
+    public class Services
     {
-        Parser parser = new Parser();
+        Category category;
+        public Services( Category categoryInstance)
+        {
+            category = categoryInstance;
+        }
 
         /// <summary>
         /// Get inputs for Expense.
         /// </summary>
         /// <returns>Expense</returns>
-        public Expense GetInputsForExpense()
+        public Expense GetPropertiesOfExpense()
         {
             try
             {
-                DateOnly date = DateOnly.Parse(parser.ValidateInputs<string>("Enter Date (yyyy/mm/dd) : ").ToString());
+                DateOnly date = DateOnly.Parse(Parser.ValidateInputs<string>(ConsoleColor.Yellow, "Enter Date (yyyy/mm/dd) : ").ToString());
 
                 var category = GetCategory();
 
-                var amountMode = parser.ValidateInputs<int>("Choose Mode of cash : \n1. ECash \n2.Cash : ");
+                var amountMode = Parser.ValidateInputs<int>(ConsoleColor.Yellow, "Choose Mode of cash : \n1. ECash \n2.Cash : ");
 
                 int account = 0;
                 ModesOfCash AmountMode;
                 if (amountMode == 1)
                 {
                     AmountMode = ModesOfCash.ECash;
-                    account = parser.ValidateInputs<int>("Enter Account Number : ");
+                    account = Parser.ValidateInputs<int>(ConsoleColor.Yellow, "Enter Account Number : ");
                 }
                 else
                 {
                     AmountMode = ModesOfCash.Cash;
                 }
-                var amount = parser.ValidateInputs<double>("Enter amount : ");
+                var amount = Parser.ValidateInputs<double>(ConsoleColor.Yellow, "Enter amount : ");
 
-                var note = parser.ValidateInputs<string>("Enter notes : ");
+                var note = Parser.ValidateInputs<string>(ConsoleColor.Yellow, "Enter notes : ");
 
-                var newExpense = new Expense(date, category, amount, AmountMode, note, account);
+                var newExpense = new Expense(date, category, account, AmountMode, note, amount);
                 return newExpense;
             }
             catch (Exception ex)
             {
-                parser.DisplayMessages(ex.Message);
-                return default;
+                Parser.DisplayMessages(ConsoleColor.Red, ex.Message);
+                return default!;
             }
         }
 
@@ -53,23 +57,23 @@ namespace ExpenseTrackerConsoleApplication
         /// Get Inputs for income.
         /// </summary>
         /// <returns>Income</returns>
-        public Income GetInputsForIncome()
+        public Income GetPropertiesOfIncome()
         {
             try
             {
-                DateOnly date = DateOnly.Parse(parser.ValidateInputs<string>("Enter Date (yyyy/mm/dd) : "));
+                DateOnly date = DateOnly.Parse(Parser.ValidateInputs<string>(ConsoleColor.Yellow, "Enter Date (yyyy/mm/dd) : "));
 
                 var category = GetCategory();
 
                 int account = 0;
 
-                var amountMode = parser.ValidateInputs<int>("Choose Mode of cash : \n1. ECash \n2.Cash : ");
+                var amountMode = Parser.ValidateInputs<int>(ConsoleColor.Yellow, "Choose Mode of cash : \n1. ECash \n2.Cash : ");
                 ModesOfCash AmountMode;
 
                 if (amountMode == 1)
                 {
                     AmountMode = ModesOfCash.ECash;
-                    account = parser.ValidateInputs<int>("Enter Account Number : ");
+                    account = Parser.ValidateInputs<int>(ConsoleColor.Yellow, "Enter Account Number : ");
 
                 }
                 else
@@ -77,17 +81,17 @@ namespace ExpenseTrackerConsoleApplication
                     AmountMode = ModesOfCash.Cash;
                 }
 
-                var amount = parser.ValidateInputs<double>("Enter amount : ");
+                var amount = Parser.ValidateInputs<double>(ConsoleColor.Yellow, "Enter amount : ");
 
-                var note = parser.ValidateInputs<string>("Enter notes : ");
+                var note = Parser.ValidateInputs<string>(ConsoleColor.Yellow, "Enter notes : ");
 
-                var newIncome = new Income(date, category, amount, AmountMode, note, account);
+                var newIncome = new Income(date, category, account,AmountMode, note, amount);
                 return newIncome;
             }
             catch (Exception ex)
             {
-                parser.DisplayMessages(ex.Message);
-                return default;
+                Parser.DisplayMessages(ConsoleColor.Red, ex.Message);
+                return default!;
             }
 
         }
@@ -98,16 +102,18 @@ namespace ExpenseTrackerConsoleApplication
         /// <returns>string</returns>
         public string GetCategory()
         {
-            ConsoleTable categoryTable = new("Categories Available ");
-            foreach (var categoryValue in Category.Categories)
+            ConsoleTable categoryTable = new("Category Available ");
+            foreach (var categoryValue in this.category.Categories)
             {
                 categoryTable.AddRow(categoryValue);
             }
             categoryTable.Write();
-            var category = parser.ValidateInputs<string>("Choose category from the above options : ");
-            while (!Category.Categories.Contains(category))
+
+            var category = Parser.ValidateInputs<string>(ConsoleColor.Yellow, "Choose category from the above options : ");
+
+            while (!this.category.Categories.Contains(category))
             {
-                category = parser.ValidateInputs<string>("Enter category was not found, Please enter valid category : ");
+                category = Parser.ValidateInputs<string>(ConsoleColor.Magenta, "Enter category was not found, Please enter valid category : ");
             }
             return category;
         }
@@ -120,7 +126,7 @@ namespace ExpenseTrackerConsoleApplication
         {
             int i = 1;
             Console.WriteLine("Choose which to update : ");
-            foreach (var updateValue in Enum.GetValues(typeof(UpdateAttributes)))
+            foreach (var updateValue in Enum.GetValues(typeof(Attributes)))
             {
                 Console.WriteLine($"{i} . {updateValue}");
                 i++;

@@ -9,11 +9,11 @@ namespace ExpenseTrackerConsoleApplication
     /// <summary>
     /// Users that are active currently.
     /// </summary>
-    internal class ActiveUsers
+    public class ActiveUsers
     {
         /// <summary>
         /// List of users that are active.
         /// </summary>
-        public static List<User> ActiveUsersList = new List<User>();
+        public static string? ActiveUser {get; set;}
     }
 }

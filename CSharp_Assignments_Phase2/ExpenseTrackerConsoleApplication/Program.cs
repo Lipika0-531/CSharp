@@ -3,7 +3,7 @@
     /// <summary>
     /// Driver class.
     /// </summary>
-    internal class Program
+    public class Program
     {
         /// <summary>
         /// Driver method.

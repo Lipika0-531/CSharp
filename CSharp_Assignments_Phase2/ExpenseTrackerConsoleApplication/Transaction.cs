@@ -9,7 +9,7 @@ namespace ExpenseTrackerConsoleApplication
     /// <summary>
     /// Base class for Income and Expense.
     /// </summary>
-    internal class Transaction
+    public class Transaction
     {
         /// <summary>
         /// Date
@@ -19,7 +19,7 @@ namespace ExpenseTrackerConsoleApplication
         /// <summary>
         /// Category value
         /// </summary>
-        public Category? Categories { get; set; }
+        public string? Category { get; set; }
 
         /// <summary>
         /// Amount

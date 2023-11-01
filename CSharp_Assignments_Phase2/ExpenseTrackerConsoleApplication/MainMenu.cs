@@ -11,204 +11,208 @@ namespace ExpenseTrackerConsoleApplication
     /// <summary>
     /// Contains menu to be displayed.
     /// </summary>
-    internal class MainMenu
+    public class MainMenu
     {
+        UserAuthentication userAuthentication;
+        FileManager fileManager;
+        Services services;
+        Category category;
+
+        public MainMenu()
+        {
+            fileManager = new FileManager(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
+            category = new Category();
+            services = new Services(category);
+            userAuthentication = new UserAuthentication(fileManager, services, category);
+        }
+
         /// <summary>
         /// Menu to be displayed.
         /// </summary>
         /// <returns>Task</returns>
         public async Task UserMenu()
         {
-            Parser parser = new Parser();
             try
             {
-                Services services = new Services();
-                Login login = new Login();
-                SignIn signIn = new SignIn();
-                FileManager fileManager = new FileManager();
+                
+                string userData = string.Empty;
+                User user = null!;
 
+                string userNameToSignUp = string.Empty;
+                string passwordToSignUp = string.Empty;
+                ActiveUsers.ActiveUser = string.Empty;
 
-                User user = null;
                 while (true)
                 {
-                    parser.DisplayMessages("Welcome to Money manager ! \n" +
-                        "Choose any options below \n" +
-                        "1. LogIn\n" +
-                        "2. SignUp\n" +
-                        "3. Add Expense\n" +
-                        "4. Add Income\n" +
-                        "5. View Expense\n" +
-                        "6. View Income\n" +
-                        "7. Update Expense \n" +
-                        "8. Update Income \n" +
-                        "9. Delete Expense \n" +
-                        "10. Delete Income \n" +
-                        "11. Statistics \n" +
-                        "12. LogOut \n" +
-                        "13. SignOut \n" +
-                        "14. Exit", 1);
-                    int.TryParse(Console.ReadLine(), out int choice);
-                    switch (choice)
+                    Parser.DisplayMessages(ConsoleColor.Cyan, "\nWelcome to Expense Tracker");
+                    Parser.DisplayMessages(ConsoleColor.Cyan, "1. SignUp");
+                    Parser.DisplayMessages(ConsoleColor.Cyan, "2. LogIn");
+                    Parser.DisplayMessages(ConsoleColor.Cyan, "3. Add Income");
+                    Parser.DisplayMessages(ConsoleColor.Cyan, "4. Add Expense");
+                    Parser.DisplayMessages(ConsoleColor.Cyan, "5. View Income");
+                    Parser.DisplayMessages(ConsoleColor.Cyan, "6. View Expense");
+                    Parser.DisplayMessages(ConsoleColor.Cyan, "7. Update Income");
+                    Parser.DisplayMessages(ConsoleColor.Cyan, "8. Update Expense");
+                    Parser.DisplayMessages(ConsoleColor.Cyan, "9. Delete Income");
+                    Parser.DisplayMessages(ConsoleColor.Cyan, "10. Delete Expense");
+                    Parser.DisplayMessages(ConsoleColor.Cyan, "11. View Statistics");
+                    Parser.DisplayMessages(ConsoleColor.Cyan, "12. LogOut");
+                    Parser.DisplayMessages(ConsoleColor.Cyan, "13. Exit");
+
+                    Console.Write("Choose option : ");
+
+                    if (Enum.TryParse(Console.ReadLine(), out MenuOptions option))
                     {
-                        case 1:
-                            Console.WriteLine("LogIn");
-                            string userNameToLogin = parser.ValidateInputs<string>("Enter User Name : ");
-                            string passwordToLogin = parser.ValidateInputs<string>("Enter Password : ");
-                            await login.LogIn(userNameToLogin, passwordToLogin);
-                            break;
-                        case 2:
-                            Console.WriteLine("SignUp");
-                            string userNameToSignUp = parser.ValidateInputs<string>("Enter UserName : ");
-                            string passwordToSignUp = parser.ValidateInputs<string>("Enter Password : ");
-                            userNameToSignUp = signIn.CheckIfUserNameUnique(userNameToSignUp);
-                            user = signIn.UserSignIn(userNameToSignUp, passwordToSignUp);
-                            foreach (var activeUsers in ActiveUsers.ActiveUsersList)
-                            {
-                                Console.WriteLine($"Active Users : {activeUsers.UserName}");
-                            }
+                        switch (option)
+                        {
+                            case MenuOptions.SignUp:
+                                Console.WriteLine("SignUp");
+                                userNameToSignUp = Parser.ValidateInputs<string>(ConsoleColor.Yellow, "Enter UserName : ");
+                                passwordToSignUp = Parser.ValidateInputs<string>(ConsoleColor.Yellow, "Enter Password : ");
+                                userNameToSignUp = userAuthentication.CheckIfUserNameUnique(userNameToSignUp);
+                                user = userAuthentication.UserSignIn(userNameToSignUp, passwordToSignUp, fileManager);
 
-                            break;
-                        case 3:
-                            if (ActiveUsers.ActiveUsersList.Contains(user))
-                            {
-                                parser.DisplayMessages("Add Expense", 4);
-                                Expense expenseToAdd = services.GetInputsForExpense();
-                                user?.AddExpense(expenseToAdd);
-                            }
-                            else
-                            {
-                                parser.DisplayMessages("Login or SignUp !");
-                            }
+                                Console.WriteLine($"Active Users : {ActiveUsers.ActiveUser}");
+                                break;
+                            case MenuOptions.LogIn:
+                                Console.WriteLine("LogIn");
+                                string userNameToLogin = Parser.ValidateInputs<string>(ConsoleColor.Yellow, "Enter User Name : ");
+                                string passwordToLogin = Parser.ValidateInputs<string>(ConsoleColor.Yellow, "Enter Password : ");
+                                User userLogin = new User(userNameToLogin, passwordToLogin, category, services);
+                                await userAuthentication.LogIn(userNameToLogin, passwordToLogin, userLogin);
+                                user = userLogin;
 
-                            break;
-                        case 4:
-                            if (ActiveUsers.ActiveUsersList.Contains(user))
-                            {
-                                parser.DisplayMessages("Add Income !", 4);
-                                Income incomeToAdd = services.GetInputsForIncome();
-                                user?.AddIncome(incomeToAdd);
-                            }
-                            else
-                            {
-                                parser.DisplayMessages("Login or SignUp !");
-                            }
-                            break;
-                        case 5:
-                            if (ActiveUsers.ActiveUsersList.Contains(user))
-                            {
-                                parser.DisplayMessages("View Expense ", 4);
-                                user?.ViewExpense(user);
-                            }
-                            else
-                            {
-                                parser.DisplayMessages("Login or SignUp !");
-                            }
-                            break;
-                        case 6:
-                            if (ActiveUsers.ActiveUsersList.Contains(user))
-                            {
-                                parser.DisplayMessages("View Income ", 4);
-                                user?.ViewIncome(user);
-                            }
-                            else
-                            {
-                                parser.DisplayMessages("Login or SignUp !");
-                            }
-                            break;
-                        case 7:
-                            if (ActiveUsers.ActiveUsersList.Contains(user))
-                            {
-                                user.UpdatingValuesForUserExpense();
-                            }
-                            else
-                            {
-                                parser.DisplayMessages("Login or SignUp !");
-                            }
-                            break;
-                        case 8:
-                            if (ActiveUsers.ActiveUsersList.Contains(user))
-                            {
-                                user.UpdatingValuesForUserIncome();
-                            }
-                            else
-                            {
-                                parser.DisplayMessages("Login or SignUp !");
-                            }
-                            break;
-                        case 9:
-                            if (ActiveUsers.ActiveUsersList.Contains(user))
-                            {
-                                user?.DeleteExpense(user);
-                            }
-                            else
-                            {
-                                parser.DisplayMessages("Login or SignUp !");
-                            }
-                            break;
-                        case 10:
-                            if (ActiveUsers.ActiveUsersList.Contains(user))
-                            {
-                                user?.DeleteIncome(user);
-                            }
-                            else
-                            {
-                                parser.DisplayMessages("Login or SignUp !");
-                            }
-                            break;
-                        case 11:
-                            if (ActiveUsers.ActiveUsersList.Contains(user))
-                            {
-                                user?.ViewTotalExpense(user);
-                                user?.ViewTotalIncome(user);
-                            }
-                            else
-                            {
-                                parser.DisplayMessages("Login or SignUp !");
-                            }
-                            break;
-                        case 12:
-                            if (ActiveUsers.ActiveUsersList.Contains(user))
-                            {
-                                parser.DisplayMessages("Logging out !", 4);
-                                LogOut logOut = new LogOut();
-                                await logOut.LogOutUser(user);
-                            }
-                            else
-                            {
-                                parser.DisplayMessages("Login or SignUp !");
-                            }
-                            break;
-                        case 13:
-                            if (ActiveUsers.ActiveUsersList.Contains(user))
-                            {
-                                parser.DisplayMessages("Signing Out !", 4);
-                                SignOut signOut = new SignOut();
-                                await signOut.SignOutFromUserList(user);
-                                parser.DisplayMessages("Successfully Signed Out !");
-                            }
-                            else
-                            {
-                                parser.DisplayMessages("Login or SignUp !");
-                            }
+                                ActiveUsers.ActiveUser = user.UserName;
 
-                            break;
-                        case 14:
-                            fileManager.WriteUserDetailsToFile(user);
+                                break;
+                            case MenuOptions.AddIncome:
+                                if (ActiveUsers.ActiveUser == user!.UserName)
+                                {
+                                    Parser.DisplayMessages(ConsoleColor.Yellow, "Add Income");
+                                    Income incomeToAdd = services.GetPropertiesOfIncome();
+                                    user?.AddIncome(incomeToAdd);
+                                }
+                                else
+                                {
+                                    Parser.DisplayMessages(ConsoleColor.Red, "Login or SignUp !");
+                                }
 
-                            ActiveUsers.ActiveUsersList.Clear();
-                            ActiveUsers.ActiveUsersList.Clear();
+                                break;
+                            case MenuOptions.AddExpense:
 
-                            Environment.Exit(0);
-                            break;
-                        default:
-                            parser.DisplayMessages("Invalid Input !");
-                            break;
+                                if (ActiveUsers.ActiveUser == user!.UserName)
+                                {
+                                    Parser.DisplayMessages(ConsoleColor.Yellow, "Add Income");
+                                    Expense expenseToAdd = services.GetPropertiesOfExpense();
+                                    user?.AddExpense(expenseToAdd);
+                                }
+                                else
+                                {
+                                    Parser.DisplayMessages(ConsoleColor.Red, "Login or SignUp !");
+                                }
+                                break;
+                            case MenuOptions.ViewIncomes:
+                                if (ActiveUsers.ActiveUser == user!.UserName)
+                                {
+                                    Parser.DisplayMessages(ConsoleColor.Yellow, "View Income ");
+                                    user?.ViewIncome(user);
+                                }
+                                else
+                                {
+                                    Parser.DisplayMessages(ConsoleColor.Red, "Login or SignUp !");
+                                }
+                                break;
+                            case MenuOptions.ViewExpenses:
+                                if (ActiveUsers.ActiveUser == user!.UserName)
+                                {
+                                    Parser.DisplayMessages(ConsoleColor.Yellow, "View Expense ");
+                                    user?.ViewExpense(user);
+                                }
+                                else
+                                {
+                                    Parser.DisplayMessages(ConsoleColor.Red, "Login or SignUp !");
+                                }
+
+                                break;
+                            case MenuOptions.UpdateIncomes:
+                                if (ActiveUsers.ActiveUser == user!.UserName)
+                                {
+                                    user.UpdatingValuesForUserIncome();
+                                }
+                                else
+                                {
+                                    Parser.DisplayMessages(ConsoleColor.Red, "Login or SignUp !");
+                                }
+                                break;
+                            case MenuOptions.UpdateExpenses:
+                                if (ActiveUsers.ActiveUser == user!.UserName)
+                                {
+                                    user.UpdatingValuesForExpense();
+                                }
+                                else
+                                {
+                                    Parser.DisplayMessages(ConsoleColor.Red, "Login or SignUp !");
+                                }
+                                break;
+                            case MenuOptions.RemoveIncome:
+                                if (ActiveUsers.ActiveUser == user!.UserName)
+                                {
+                                    user?.DisplayDeleteMessageForIncome(user);
+                                }
+                                else
+                                {
+                                    Parser.DisplayMessages(ConsoleColor.Red, "Login or SignUp !");
+                                }
+                                break;
+                            case MenuOptions.RemoveExpense:
+                                if (ActiveUsers.ActiveUser == user!.UserName)
+                                {
+                                    user?.DisplayDeleteMessageForExpense(user);
+                                }
+                                else
+                                {
+                                    Parser.DisplayMessages(ConsoleColor.Red, "Login or SignUp !");
+                                }
+                                break;
+                            case MenuOptions.ViewStatistic:
+                                if (ActiveUsers.ActiveUser == user!.UserName)
+                                {
+                                    user?.ViewTotalExpense(user);
+                                    user?.ViewTotalIncome(user);
+                                }
+                                else
+                                {
+                                    Parser.DisplayMessages(ConsoleColor.Red, "Login or SignUp !");
+                                }
+                                break;
+                            case MenuOptions.LogOut:
+                                if (ActiveUsers.ActiveUser == user!.UserName)
+                                {
+                                    Parser.DisplayMessages(ConsoleColor.Magenta, "Logging out !");
+
+                                    await userAuthentication.LogOut(user);
+                                    fileManager.WriteSignInDetailsToFile(user);
+
+                                }
+                                else
+                                {
+                                    Parser.DisplayMessages(ConsoleColor.Red, "Login or SignUp !");
+                                }
+                                break;
+                            case MenuOptions.Exit:
+                                Parser.DisplayMessages(ConsoleColor.Green, $"ThankYou {user!.UserName}");
+                                Environment.Exit(0);
+                                break;
+                            default:
+                                Parser.DisplayMessages(ConsoleColor.Red, "Invalid Input !");
+                                break;
+                        }
                     }
                 }
             }
             catch (Exception ex)
             {
-                parser.DisplayMessages($"Error: {ex}");
+                Parser.DisplayMessages(ConsoleColor.Red,$"Error: {ex}");
             }
         }
     }

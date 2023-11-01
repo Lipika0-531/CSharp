@@ -13,49 +13,18 @@ namespace ExpenseTrackerConsoleApplication
     /// <summary>
     /// Parsing Inputs.
     /// </summary>
-    internal class Parser
+    public class Parser
     {
-        /// <summary>
-        /// Display messages in color.
-        /// </summary>
-        /// <param name="colorValue">ColorValue</param>
-        /// <returns>ConsoleColor</returns>
-        public ConsoleColor DisplayColor(int colorValue)
-        {
-            if (colorValue == 1)
-            {
-                return ConsoleColor.Cyan;
-            }
-            else if (colorValue == 2)
-            {
-                return ConsoleColor.Red;
-            }
-            else if (colorValue == 3)
-            {
-                return ConsoleColor.Yellow;
-            }
-            else if (colorValue == 4)
-            {
-                return ConsoleColor.Magenta;
-            }
-            else
-            {
-                return ConsoleColor.Green;
-            }
-        }
-
         /// <summary>
         /// Display Messages in color.
         /// </summary>
         /// <param name="input">Input</param>
         /// <param name="colorToBeDisplayed">ColorToBeDisplayed</param>
-        public void DisplayMessages(string input = " ", int colorToBeDisplayed = 2)
+        public static void DisplayMessages(Enum ConsoleColor, string input = " ")
         {
-            var color = this.DisplayColor(colorToBeDisplayed);
-
-            Console.ForegroundColor = color;
+            Console.ForegroundColor = (ConsoleColor)ConsoleColor;
             Console.WriteLine(input);
-            Console.ForegroundColor = ConsoleColor.White;
+            Console.ForegroundColor = System.ConsoleColor.White;
         }
 
         /// <summary>
@@ -67,21 +36,15 @@ namespace ExpenseTrackerConsoleApplication
         /// <param name="errorMessage">ErrorMessage</param>
         /// <returns>T</returns>
         /// <exception cref="InvalidCastException">Exception</exception>
-        public T ValidateInputs<T>(string input = "Enter Input", int colorToBeDisplayed = 3, string errorMessage = "Invalid Input")
+        public static T ValidateInputs<T>(Enum ConsoleColor, string input = "Enter Input", string errorMessage = "Invalid Input")
         {
-            var color = this.DisplayColor(colorToBeDisplayed);
-
-            Console.ForegroundColor = color;
-            Console.WriteLine(input);
-            Console.ForegroundColor = ConsoleColor.White;
+            DisplayMessages(System.ConsoleColor.Yellow, input);
 
             string value = Console.ReadLine()!;
 
             while (string.IsNullOrEmpty(value) && TypeDescriptor.GetConverter(typeof(T)).IsValid(value))
             {
-                Console.ForegroundColor = color;
-                Console.WriteLine($"{errorMessage} Enter value : ");
-                Console.ForegroundColor = ConsoleColor.White;
+                DisplayMessages(System.ConsoleColor.Yellow, $"{errorMessage} Enter value : ");
 
                 value = Console.ReadLine()!;
             }

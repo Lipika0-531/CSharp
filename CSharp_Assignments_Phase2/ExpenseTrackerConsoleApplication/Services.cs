@@ -1,4 +1,5 @@
 ﻿using ConsoleTables;
+using System.Text.RegularExpressions;
 using static ExpenseTrackerConsoleApplication.User;
 
 namespace ExpenseTrackerConsoleApplication
@@ -9,9 +10,11 @@ namespace ExpenseTrackerConsoleApplication
     public class Services
     {
         Category category;
-        public Services( Category categoryInstance)
+        Logger logger;
+        public Services( Category categoryInstance, Logger loggerInstance)
         {
             category = categoryInstance;
+            logger = loggerInstance;
         }
 
         /// <summary>
@@ -22,24 +25,24 @@ namespace ExpenseTrackerConsoleApplication
         {
             try
             {
-                DateOnly date = DateOnly.Parse(Parser.ValidateInputs<string>(ConsoleColor.Yellow, "Enter Date (yyyy/mm/dd) : ").ToString());
+                DateOnly date = DateOnly.Parse(Parser.ValidateInputsUsingRegex<string>(Constants.regexForDate,ConsoleColor.Yellow, "Enter Date (yyyy/mm/dd) : ").ToString());
 
                 var category = GetCategory();
 
-                var amountMode = Parser.ValidateInputs<int>(ConsoleColor.Yellow, "Choose Mode of cash : \n1. ECash \n2.Cash : ");
+                var amountMode = Parser.ValidateInputsUsingRegex<int>(Constants.regexForModes, ConsoleColor.Yellow, "Choose Mode of cash : \n1. ECash \n2.Cash : ");
 
                 int account = 0;
                 ModesOfCash AmountMode;
                 if (amountMode == 1)
                 {
                     AmountMode = ModesOfCash.ECash;
-                    account = Parser.ValidateInputs<int>(ConsoleColor.Yellow, "Enter Account Number : ");
+                    account = Parser.ValidateInputsUsingRegex<int>(Constants.regexForAccountNumber, ConsoleColor.Yellow, "Enter Account Number : ");
                 }
                 else
                 {
                     AmountMode = ModesOfCash.Cash;
                 }
-                var amount = Parser.ValidateInputs<double>(ConsoleColor.Yellow, "Enter amount : ");
+                var amount = Parser.ValidateInputsUsingRegex<decimal>(Constants.regexForAmount,ConsoleColor.Yellow, "Enter amount : ");
 
                 var note = Parser.ValidateInputs<string>(ConsoleColor.Yellow, "Enter notes : ");
 
@@ -49,6 +52,7 @@ namespace ExpenseTrackerConsoleApplication
             catch (Exception ex)
             {
                 Parser.DisplayMessages(ConsoleColor.Red, ex.Message);
+                logger.LogErrors(ex.Message);
                 return default!;
             }
         }
@@ -61,19 +65,19 @@ namespace ExpenseTrackerConsoleApplication
         {
             try
             {
-                DateOnly date = DateOnly.Parse(Parser.ValidateInputs<string>(ConsoleColor.Yellow, "Enter Date (yyyy/mm/dd) : "));
+                DateOnly date = DateOnly.Parse(Parser.ValidateInputsUsingRegex<string>(Constants.regexForDate,ConsoleColor.Yellow, "Enter Date (yyyy/mm/dd) : "));
 
                 var category = GetCategory();
 
                 int account = 0;
 
-                var amountMode = Parser.ValidateInputs<int>(ConsoleColor.Yellow, "Choose Mode of cash : \n1. ECash \n2.Cash : ");
+                var amountMode = Parser.ValidateInputsUsingRegex<int>(Constants.regexForModes, ConsoleColor.Yellow, "Choose Mode of cash : \n1. ECash \n2.Cash : ");
                 ModesOfCash AmountMode;
 
                 if (amountMode == 1)
                 {
                     AmountMode = ModesOfCash.ECash;
-                    account = Parser.ValidateInputs<int>(ConsoleColor.Yellow, "Enter Account Number : ");
+                    account = Parser.ValidateInputsUsingRegex<int>(Constants.regexForAccountNumber, ConsoleColor.Yellow, "Enter Account Number : ");
 
                 }
                 else
@@ -81,7 +85,7 @@ namespace ExpenseTrackerConsoleApplication
                     AmountMode = ModesOfCash.Cash;
                 }
 
-                var amount = Parser.ValidateInputs<double>(ConsoleColor.Yellow, "Enter amount : ");
+                var amount = Parser.ValidateInputsUsingRegex<decimal>(Constants.regexForAmount, ConsoleColor.Yellow, "Enter amount : ");
 
                 var note = Parser.ValidateInputs<string>(ConsoleColor.Yellow, "Enter notes : ");
 
@@ -91,6 +95,7 @@ namespace ExpenseTrackerConsoleApplication
             catch (Exception ex)
             {
                 Parser.DisplayMessages(ConsoleColor.Red, ex.Message);
+                logger.LogErrors(ex.Message);
                 return default!;
             }
 
@@ -119,7 +124,7 @@ namespace ExpenseTrackerConsoleApplication
         }
 
         /// <summary>
-        /// Menu for updating values.
+        /// MainMenu for updating values.
         /// </summary>
         /// <returns>int</returns>
         public int UpdateMenu()

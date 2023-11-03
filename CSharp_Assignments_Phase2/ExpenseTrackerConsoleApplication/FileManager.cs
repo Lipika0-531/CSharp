@@ -11,14 +11,19 @@ namespace ExpenseTrackerConsoleApplication
     /// <summary>
     /// Adding and Reading Files.
     /// </summary>
-    public class FileManager
+    public class FileManager 
     {
         string filePath;
-        public FileManager(string userFilePath)
+        Logger logger;
+        public FileManager(string userFilePath, Logger loggerInstance)
         {
             filePath = userFilePath;
+            logger = loggerInstance;
         }
 
+        private FileStream fileStream { get; set; }
+
+        private StreamWriter streamWriter { get; set; }
         public string fileName(User user)
         {
             string userDetailsFile = $"{user.UserName}.json";
@@ -31,6 +36,7 @@ namespace ExpenseTrackerConsoleApplication
             if (!File.Exists(Path.Combine(filePath, userDetailsFile)))
             {
                 Parser.DisplayMessages(ConsoleColor.Red, "User not found ! Try signing in or Try again !");
+                logger.LogErrors("User not found ! Try signing in or Try again !");
                 return false;
             }
             else
@@ -47,6 +53,7 @@ namespace ExpenseTrackerConsoleApplication
                 else
                 {
                     Parser.DisplayMessages(ConsoleColor.Red, "UserName and Password doesn't Match !");
+                    logger.LogErrors("UserName and Password doesn't Match !");
                     return false;
                 }
             }
@@ -60,12 +67,18 @@ namespace ExpenseTrackerConsoleApplication
             {
                 using (StreamWriter sw = new StreamWriter(writer))
                 {
-                    var encodedPassword = user.Password.EncodedPassword;
-                    string jsonUserData = JsonConvert.SerializeObject(user);
-                    sw.Write(jsonUserData);
+                    string userData = SerializeFile(user);
+                    sw.Write(userData);
                     return true;
                 }
             }
+        }
+
+
+        public string SerializeFile(User user)
+        {
+            string jsonUserData = JsonConvert.SerializeObject(user);
+            return jsonUserData;
         }
 
     }

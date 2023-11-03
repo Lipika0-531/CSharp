@@ -24,7 +24,7 @@ namespace ExpenseTrackerConsoleApplication
         /// <summary>
         /// Amount
         /// </summary>
-        public double Amount { get; set; }
+        public decimal Amount { get; set; }
 
         /// <summary>
         /// Mode of Cash

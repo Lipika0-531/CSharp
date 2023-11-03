@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Principal;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
@@ -17,11 +18,12 @@ namespace ExpenseTrackerConsoleApplication
     {
         Category category;
         Services services;
+        Logger logger;
         public User()
         {
 
         }
-        public User(string userName, string password, Category categoryInstance, Services serviceInstance)
+        public User(string userName, string password, Category categoryInstance, Services serviceInstance, Logger loggerInstance)
         {
             UserName = userName;
             Password = new Password(password);
@@ -29,6 +31,7 @@ namespace ExpenseTrackerConsoleApplication
             Expenses = new List<Expense>();
             category = categoryInstance;
             services = serviceInstance;
+            logger = loggerInstance;
         }
 
         /// <summary>
@@ -57,8 +60,17 @@ namespace ExpenseTrackerConsoleApplication
         /// <param name="income">Income</param>
         public void AddIncome(Income income)
         {
-            Incomes.Add(income);
-            Parser.DisplayMessages(ConsoleColor.Green, "Income Successfully Added !");
+            if (income != null)
+            {
+                Incomes.Add(income);
+                Parser.DisplayMessages(ConsoleColor.Green, "Income Successfully Added !");
+                logger.LogErrors("Income Successfully Added !");
+            }
+            else
+            {
+                throw new Exception();
+            }
+
         }
 
         /// <summary>
@@ -67,8 +79,17 @@ namespace ExpenseTrackerConsoleApplication
         /// <param name="expense">Expense</param>
         public void AddExpense(Expense expense)
         {
-            Expenses.Add(expense);
-            Parser.DisplayMessages(ConsoleColor.Green, "Expense Successfully Added !");
+            if (expense != null)
+            {
+                Expenses.Add(expense);
+                Parser.DisplayMessages(ConsoleColor.Green, "Expense Successfully Added !");
+                logger.LogErrors("Expense Successfully Added !");
+            }
+            else
+            {
+                throw new Exception();
+            }
+
         }
 
         /// <summary>
@@ -90,6 +111,7 @@ namespace ExpenseTrackerConsoleApplication
             else
             {
                 Parser.DisplayMessages(ConsoleColor.Red, "No expense Added !");
+                logger.LogErrors("No expense Added!");
             }
         }
 
@@ -111,14 +133,15 @@ namespace ExpenseTrackerConsoleApplication
             }
             else
             {
-                Parser.DisplayMessages(ConsoleColor.Red, "No expense Added !");
+                Parser.DisplayMessages(ConsoleColor.Red, "No income Added !");
+                logger.LogErrors("No income Added !");
             }
 
         }
 
-        public double ViewTotalExpense(User user)
+        public decimal ViewTotalExpense(User user)
         {
-            double totalExpense = 0;
+            decimal totalExpense = 0;
             if (user.Expenses.Count > 0)
             {
                 foreach (var value in this.Expenses)
@@ -126,14 +149,15 @@ namespace ExpenseTrackerConsoleApplication
                     totalExpense += value.Amount;
                 }
 
-                for(int i = 0; i < totalExpense; i++)
+                for (int i = 0; i < totalExpense; i++)
                 {
                     Console.BackgroundColor = ConsoleColor.Green;
                     Console.WriteLine(" ");
                     Console.BackgroundColor = ConsoleColor.Green;
                 }
                 Console.BackgroundColor = ConsoleColor.Black;
-                Parser.DisplayMessages(ConsoleColor.Magenta, $"Total expense: {totalExpense}");
+                Parser.DisplayMessages(ConsoleColor.Magenta, $"\nTotal expense: {totalExpense}");
+                logger.LogErrors($"Total expense: {totalExpense}");
                 Console.ForegroundColor = ConsoleColor.White;
                 return totalExpense;
             }
@@ -144,9 +168,9 @@ namespace ExpenseTrackerConsoleApplication
             }
         }
 
-        public double ViewTotalIncome(User user)
+        public decimal ViewTotalIncome(User user)
         {
-            double totalIncome = 0;
+            decimal totalIncome = 0;
             if (user.Incomes != null && user.Incomes.Count > 0)
             {
                 foreach (var value in this.Incomes)
@@ -156,17 +180,20 @@ namespace ExpenseTrackerConsoleApplication
 
                 for (int i = 0; i < totalIncome; i++)
                 {
-                    Console.BackgroundColor = ConsoleColor.Red;
-                    Console.Write(" ");
+                    Console.BackgroundColor = ConsoleColor.Green;
+                    Console.WriteLine(" ");
+                    Console.BackgroundColor = ConsoleColor.Green;
                 }
                 Console.BackgroundColor = ConsoleColor.Black;
-                Parser.DisplayMessages(ConsoleColor.Magenta, $"Total Income: {totalIncome}");
+                Parser.DisplayMessages(ConsoleColor.Magenta, $"\nTotal income: {totalIncome}");
+                logger.LogErrors($"Total Income: {totalIncome}");
                 Console.ForegroundColor = ConsoleColor.White;
                 return totalIncome;
             }
             else
             {
                 Parser.DisplayMessages(ConsoleColor.Red, "No Income Added !");
+                logger.LogErrors("No Income Added !");
                 return default;
             }
         }
@@ -175,9 +202,9 @@ namespace ExpenseTrackerConsoleApplication
         /// <summary>
         /// Update Expense.
         /// </summary>
-        public void UpdatingValuesForExpense()
+        public void UpdatingValuesForExpense(User user)
         {
-            try
+            if (user.Expenses.Count > 0)
             {
                 int indexToUpdate = this.IndexForExpense("Choose which Expense to be updated :");
                 int choice = services.UpdateMenu();
@@ -187,21 +214,23 @@ namespace ExpenseTrackerConsoleApplication
                     switch (choice)
                     {
                         case 1:
-                            DateOnly date = DateOnly.Parse(Parser.ValidateInputs<string>(ConsoleColor.Yellow, "Enter Date to be Updated : "));
+                            DateOnly date = DateOnly.Parse(Parser.ValidateInputsUsingRegex<string>(Constants.regexForDate, ConsoleColor.Yellow, "Enter Date to be Updated :(yyyy/mm/dd)  "));
                             this.UpdateDateForExpense(indexToUpdate, date);
                             Parser.DisplayMessages(ConsoleColor.Yellow, $"Value Updated to {date}");
+                            logger.LogErrors($"Value Updated to {date}");
                             break;
                         case 2:
-                            var amount = Parser.ValidateInputs<double>(ConsoleColor.Yellow, "Enter Amount to be Updated : ");
+                            var amount = Parser.ValidateInputsUsingRegex<decimal>(Constants.regexForAmount, ConsoleColor.Yellow, "Enter Amount to be Updated : ");
                             this.UpdateAmountForExpense(indexToUpdate, amount);
                             Parser.DisplayMessages(ConsoleColor.Yellow, $"Value Updated to {amount}");
+                            logger.LogErrors($"Value Updated to {amount}");
                             break;
                         case 3:
-                            var amountMode = Parser.ValidateInputs<int>(ConsoleColor.Yellow, "Choose Mode of cash : 1.ECash \n2.Cash : ");
+                            var amountMode = Parser.ValidateInputsUsingRegex<int>(Constants.regexForModes, ConsoleColor.Yellow, "Choose Mode of cash : 1.ECash \n2.Cash : ");
                             if (amountMode == 1)
                             {
                                 UpdateModeOfCashForExpense(indexToUpdate, ModesOfCash.ECash);
-                                accountNumber = Parser.ValidateInputs<int>(ConsoleColor.Yellow, "Enter Account Number : ");
+                                accountNumber = Parser.ValidateInputsUsingRegex<int>(Constants.regexForAccountNumber, ConsoleColor.Yellow, "Enter Account Number : ");
                                 this.UpdateAccountNumberForExpense(indexToUpdate, accountNumber);
                             }
                             else
@@ -209,36 +238,45 @@ namespace ExpenseTrackerConsoleApplication
                                 this.UpdateModeOfCashForExpense(indexToUpdate, ModesOfCash.Cash);
                             }
                             Parser.DisplayMessages(ConsoleColor.Yellow, $"Value Updated to {amountMode}");
+                            logger.LogErrors($"Value Updated to {amountMode}");
                             break;
                         case 4:
                             var category = services.GetCategory();
                             this.UpdateCategoryForExpense(indexToUpdate, category);
                             Parser.DisplayMessages(ConsoleColor.Yellow, $"Value Updated to {category}");
+                            logger.LogErrors($"Value Updated to {category}");
                             break;
                         case 5:
-                            if(accountNumber != 0)
+                            if (accountNumber != 0)
                             {
-                                var accountNumberToUpdate = Parser.ValidateInputs<int>(ConsoleColor.Yellow, "Enter Account Number : ");
+                                var accountNumberToUpdate = Parser.ValidateInputsUsingRegex<int>(Constants.regexForAccountNumber, ConsoleColor.Yellow, "Enter Account Number : ");
                                 this.UpdateAccountNumberForExpense(indexToUpdate, accountNumberToUpdate);
 
                                 Parser.DisplayMessages(ConsoleColor.Yellow, $"Value Updated to {accountNumberToUpdate}");
+                                logger.LogErrors($"Value Updated to {accountNumberToUpdate}");
                             }
                             break;
                         case 6:
                             var notes = Parser.ValidateInputs<string>(ConsoleColor.Yellow, "Enter Notes : ");
                             this.UpdateNotesForExpense(indexToUpdate, notes);
                             Parser.DisplayMessages(ConsoleColor.Yellow, $"Value Updated to {notes}");
+                            logger.LogErrors($"Value Updated to {notes}");
                             break;
                         default:
                             Parser.DisplayMessages(ConsoleColor.Red, "Invalid Input !");
+                            logger.LogErrors("Invalid Input !");
                             break;
                     }
+
                 }
+
             }
-            catch (Exception ex)
+            else
             {
-                Parser.DisplayMessages(ConsoleColor.Red, ex.Message);
+                Parser.DisplayMessages(ConsoleColor.Red, "No Expense ! Please add Income !");
+                logger.LogErrors("No Expense ! Please add Income !");
             }
+
         }
 
         /// <summary>
@@ -250,23 +288,17 @@ namespace ExpenseTrackerConsoleApplication
         {
             int i = 1;
             int countTobeUpdated = 0;
-            if (this.Expenses.Count > 0)
-            {
-                ConsoleTable userMenuTable = new("S.No", "Date", "Amount", " Amount Mode", "Category", " Account", " Notes");
-                foreach (var value in this.Expenses)
-                {
-                    userMenuTable.AddRow(i, value.DateOnly, value.Amount, value.AmountMode, value.Category, value.Account, value.Note);
-                    i++;
-                }
-                userMenuTable.Write();
 
-                countTobeUpdated = Parser.ValidateInputs<int>(ConsoleColor.Yellow, message);
-            }
-            else
+            ConsoleTable userMenuTable = new("S.No", "Date", "Amount", " Amount Mode", "Category", " Account", " Notes");
+            foreach (var value in this.Expenses)
             {
-                Parser.DisplayMessages(ConsoleColor.Red, "No Expense ! Please add Expense to update !");
-                return default;
+                userMenuTable.AddRow(i, value.DateOnly, value.Amount, value.AmountMode, value.Category, value.Account, value.Note);
+                i++;
             }
+            userMenuTable.Write();
+
+            countTobeUpdated = Parser.ValidateInputs<int>(ConsoleColor.Yellow, message);
+
 
             return countTobeUpdated;
         }
@@ -288,7 +320,7 @@ namespace ExpenseTrackerConsoleApplication
         /// </summary>
         /// <param name="indexToUpdate">index</param>
         /// <param name="amountToUpdate">amount</param>
-        public void UpdateAmountForExpense(int indexToUpdate, double amountToUpdate)
+        public void UpdateAmountForExpense(int indexToUpdate, decimal amountToUpdate)
         {
             this.Expenses[indexToUpdate - 1].Amount = amountToUpdate;
         }
@@ -337,9 +369,9 @@ namespace ExpenseTrackerConsoleApplication
         /// <summary>
         /// Update Income.
         /// </summary>
-        public void UpdatingValuesForUserIncome()
+        public void UpdatingValuesForUserIncome(User user)
         {
-            try
+            if (user.Incomes.Count > 0)
             {
                 int indexToUpdate = this.IndexForIncome("Choose which Income to be updated :");
                 int choice = services.UpdateMenu();
@@ -349,21 +381,23 @@ namespace ExpenseTrackerConsoleApplication
                     switch (choice)
                     {
                         case 1:
-                            DateOnly date = DateOnly.Parse(Parser.ValidateInputs<string>(ConsoleColor.Yellow, "Enter Date to be Updated : "));
+                            DateOnly date = DateOnly.Parse(Parser.ValidateInputsUsingRegex<string>(Constants.regexForDate, ConsoleColor.Yellow, "Enter Date to be Updated : "));
                             this.UpdateDateForIncome(indexToUpdate, date);
                             Parser.DisplayMessages(ConsoleColor.Yellow, $"Value Updated to {date}");
+                            logger.LogErrors($"Value Updated to {date}");
                             break;
                         case 2:
-                            var amount = Parser.ValidateInputs<double>(ConsoleColor.Yellow, "Enter Amount to be Updated : ");
+                            var amount = Parser.ValidateInputsUsingRegex<int>(Constants.regexForAmount, ConsoleColor.Yellow, "Enter Amount to be Updated : ");
                             this.UpdateAmountForIncome(indexToUpdate, amount);
                             Parser.DisplayMessages(ConsoleColor.Yellow, $"Value Updated to {amount}");
+                            logger.LogErrors($"Value Updated to {amount}");
                             break;
                         case 3:
-                            var amountMode = Parser.ValidateInputs<int>(ConsoleColor.Yellow, "Choose Mode of cash : 1. ECash \n2.Cash : ");
+                            var amountMode = Parser.ValidateInputsUsingRegex<int>(Constants.regexForModes, ConsoleColor.Yellow, "Choose Mode of cash : 1. ECash \n2.Cash : ");
                             if (amountMode == 1)
                             {
-                                UpdateModeOfCashForIncome(indexToUpdate,ModesOfCash.ECash );
-                                accountNumberToUpdate = Parser.ValidateInputs<int>(ConsoleColor.Yellow, "Enter Account Number : ");
+                                UpdateModeOfCashForIncome(indexToUpdate, ModesOfCash.ECash);
+                                accountNumberToUpdate = Parser.ValidateInputsUsingRegex<int>(Constants.regexForAccountNumber, ConsoleColor.Yellow, "Enter Account Number : ");
                                 this.UpdateAccountNumberForIncome(indexToUpdate, accountNumberToUpdate);
                             }
                             else
@@ -371,34 +405,42 @@ namespace ExpenseTrackerConsoleApplication
                                 this.UpdateModeOfCashForIncome(indexToUpdate, ModesOfCash.Cash);
                             }
                             Parser.DisplayMessages(ConsoleColor.Yellow, $"Value Updated to {amountMode}");
+                            logger.LogErrors($"Value Updated to {amountMode}");
                             break;
                         case 4:
                             var category = services.GetCategory();
                             this.UpdateCategoryForIncome(indexToUpdate, category);
                             Parser.DisplayMessages(ConsoleColor.Yellow, $"Value Updated to {category}");
+                            logger.LogErrors($"Value Updated to {category}");
                             break;
                         case 5:
-                            if(accountNumberToUpdate != 0)
+                            if (accountNumberToUpdate != 0)
                             {
-                                var accountNumber = Parser.ValidateInputs<int>(ConsoleColor.Yellow, "Enter Account Number : ");
+                                var accountNumber = Parser.ValidateInputsUsingRegex<int>(Constants.regexForAccountNumber, ConsoleColor.Yellow, "Enter Account Number : ");
                                 this.UpdateAccountNumberForIncome(indexToUpdate, accountNumber);
                                 Parser.DisplayMessages(ConsoleColor.Yellow, $"Value Updated to {accountNumber}");
+                                logger.LogErrors($"Value Updated to {accountNumber}");
                             }
                             break;
                         case 6:
                             var note = Parser.ValidateInputs<string>(ConsoleColor.Yellow, "Enter Notes : ");
                             this.UpdateNotesForIncome(indexToUpdate, note);
                             Parser.DisplayMessages(ConsoleColor.Yellow, $"Value Updated to {note}");
+                            logger.LogErrors($"Value Updated to {note}");
                             break;
                         default:
                             Parser.DisplayMessages(ConsoleColor.Red, "Invalid Input !");
+                            logger.LogErrors("Invalid Input !");
                             break;
                     }
+
                 }
+
             }
-            catch (Exception ex)
+            else
             {
-                Parser.DisplayMessages(ConsoleColor.Red, ex.Message);
+                Parser.DisplayMessages(ConsoleColor.Red, "No Income ! Please add Income !");
+                logger.LogErrors("No Income ! Please add Income !");
             }
         }
 
@@ -418,7 +460,7 @@ namespace ExpenseTrackerConsoleApplication
         /// </summary>
         /// <param name="indexToUpdate"><index/param>
         /// <param name="amountToUpdate">amount</param>
-        public void UpdateAmountForIncome(int indexToUpdate, double amountToUpdate)
+        public void UpdateAmountForIncome(int indexToUpdate, decimal amountToUpdate)
         {
             this.Incomes[indexToUpdate - 1].Amount = amountToUpdate;
         }
@@ -473,23 +515,17 @@ namespace ExpenseTrackerConsoleApplication
         {
             int i = 1;
             int index = 0;
-            if (this.Incomes.Count > 0)
-            {
-                ConsoleTable userMenuTable = new("S.No", "Date", "Amount", " Amount Mode", "Category", " Account", " Notes");
-                foreach (var value in this.Incomes)
-                {
-                    userMenuTable.AddRow(i, value.DateOnly, value.Amount, value.AmountMode, value.Category, value.Account, value.Note);
-                    i++;
-                }
-                userMenuTable.Write();
 
-                index = Parser.ValidateInputs<int>(ConsoleColor.Yellow, message);
-            }
-            else
+            ConsoleTable userMenuTable = new("S.No", "Date", "Amount", " Amount Mode", "Category", " Account", " Notes");
+            foreach (var value in this.Incomes)
             {
-                Parser.DisplayMessages(ConsoleColor.Red, "No Income ! Please add Income !");
-                return default;
+                userMenuTable.AddRow(i, value.DateOnly, value.Amount, value.AmountMode, value.Category, value.Account, value.Note);
+                i++;
             }
+            userMenuTable.Write();
+
+            index = Parser.ValidateInputs<int>(ConsoleColor.Yellow, message);
+
 
             return index;
         }
@@ -499,14 +535,34 @@ namespace ExpenseTrackerConsoleApplication
         /// <param name="user">User</param>
         public void DisplayDeleteMessageForIncome(User user)
         {
-            int indexToBeDeleted = this.IndexForIncome("Choose which Income data to be deleted : ");
-            this.DeleteIncome(indexToBeDeleted, user);
-            Parser.DisplayMessages(ConsoleColor.Green, "Successfully Deleted !");
+            if (user.Incomes.Count > 0)
+            {
+                int indexToBeDeleted = this.IndexForIncome("Choose which Income data to be deleted : ");
+                this.DeleteIncome(indexToBeDeleted, user);
+                Parser.DisplayMessages(ConsoleColor.Green, "Income data Successfully Deleted !");
+                logger.LogErrors("Income data Successfully Deleted !");
+            }
+            else
+            {
+                Parser.DisplayMessages(ConsoleColor.Red, "No Expense ! Please add Income !");
+                logger.LogErrors("No Expense ! Please add Income !");
+            }
+
         }
 
         public void DeleteIncome(int index, User user)
         {
-            Incomes.Remove(user.Incomes[index - 1]);
+
+            if (index < user.Incomes.Count)
+            {
+                Incomes.Remove(user.Incomes[index - 1]);
+            }
+            else
+            {
+                throw new Exception();
+            }
+
+
         }
         /// <summary>
         /// Delete Expense.
@@ -514,13 +570,31 @@ namespace ExpenseTrackerConsoleApplication
         /// <param name="user">User</param>
         public void DisplayDeleteMessageForExpense(User user)
         {
-            int indexToDelete = this.IndexForExpense("Choose which expense data to be deleted : ");
-            this.DeleteExpense(indexToDelete, user);
-            Parser.DisplayMessages(ConsoleColor.Green, "Successfully Deleted !");
+            if (user.Expenses.Count > 0)
+            {
+                int indexToDelete = this.IndexForExpense("Choose which expense data to be deleted : ");
+                this.DeleteExpense(indexToDelete, user);
+                Parser.DisplayMessages(ConsoleColor.Green, "Expense Data Successfully Deleted !");
+                logger.LogErrors("Expense data Successfully Deleted !");
+            }
+            else
+            {
+                Parser.DisplayMessages(ConsoleColor.Red, "No Expense ! Please add Income !");
+                logger.LogErrors("No Expense ! Please add Income !");
+            }
         }
+
         public void DeleteExpense(int index, User user)
         {
-            Expenses.Remove(user.Expenses[index - 1]);
+            if (index < user.Expenses.Count)
+            {
+                Expenses.Remove(user.Expenses[index - 1]);
+            }
+            else
+            {
+                throw new Exception();
+            }
+
         }
     }
 }

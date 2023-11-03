@@ -13,12 +13,14 @@ namespace ExpenseTrackerConsoleApplication
         FileManager fileManager;
         Services services;
         Category category;
+        Logger logger;
 
-        public UserAuthentication(FileManager fileManagerInstance, Services serviceInstance, Category categoryInstance)
+        public UserAuthentication(FileManager fileManagerInstance, Services serviceInstance, Category categoryInstance, Logger loggerInstance)
         {
             fileManager = fileManagerInstance;
             services = serviceInstance;
             category = categoryInstance;
+            logger = loggerInstance;
         }
 
         /// <summary>
@@ -42,13 +44,15 @@ namespace ExpenseTrackerConsoleApplication
                         i++;
                     }
 
-                    Parser.DisplayMessages(ConsoleColor.Green, $"Successfully Logged in ! \n Welcome {userName}");
+                    ActiveUsers.ActiveUser = user.UserName;
+                    Parser.DisplayMessages(ConsoleColor.Green, $"\nSuccessfully Logged in ! \n Welcome {userName}");
+                    logger.LogErrors($"\nSuccessfully Logged in ! \n Welcome {userName}");
                     Thread.Sleep(100);
                 });
             }
             else
             {
-                Parser.DisplayMessages(ConsoleColor.Red, "No User found ! \nTry Signing In or Try again! :)");
+                logger.LogErrors("No User found ! \nTry Signing In or Try again! :)");
             }
         }
 
@@ -73,6 +77,7 @@ namespace ExpenseTrackerConsoleApplication
                     }
                     ActiveUsers.ActiveUser = null;
                     Parser.DisplayMessages(ConsoleColor.Green, $"Successfully Logged out ! \n ThankYou {user.UserName}");
+                    logger.LogErrors($"Successfully Logged out ! \n ThankYou {user.UserName}");
 
                     Thread.Sleep(100);
                 });
@@ -81,6 +86,7 @@ namespace ExpenseTrackerConsoleApplication
             else
             {
                 Parser.DisplayMessages(ConsoleColor.Red, "No User found !");
+                logger.LogErrors("No User found !");
             }
 
             return;
@@ -99,7 +105,7 @@ namespace ExpenseTrackerConsoleApplication
         /// <returns>Added User</returns>
         public User UserSignIn(string userName, string password, FileManager fileManager)
         {
-            var addUser = new User(userName, password, category, services);
+            var addUser = new User(userName, password, category, services, logger);
             ActiveUsers.ActiveUser = addUser.UserName;
             fileManager.WriteSignInDetailsToFile(addUser);
             users[userName] = addUser;
@@ -116,6 +122,7 @@ namespace ExpenseTrackerConsoleApplication
             while (users.ContainsKey(userName))
             {
                 userName = Parser.ValidateInputs<string>(ConsoleColor.Yellow, "UserName already taken, Enter valid UserName : ");
+                logger.LogErrors("UserName already taken, Enter valid UserName : ");
             }
             return userName;
         }

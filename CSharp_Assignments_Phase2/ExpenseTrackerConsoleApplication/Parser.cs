@@ -15,6 +15,7 @@ namespace ExpenseTrackerConsoleApplication
     /// </summary>
     public class Parser
     {
+
         /// <summary>
         /// Display Messages in color.
         /// </summary>
@@ -42,12 +43,30 @@ namespace ExpenseTrackerConsoleApplication
 
             string value = Console.ReadLine()!;
 
-            while (string.IsNullOrEmpty(value) && TypeDescriptor.GetConverter(typeof(T)).IsValid(value))
+            while (string.IsNullOrWhiteSpace(value) && TypeDescriptor.GetConverter(typeof(T)).IsValid(value))
             {
                 DisplayMessages(System.ConsoleColor.Yellow, $"{errorMessage} Enter value : ");
 
                 value = Console.ReadLine()!;
             }
+            return (T)Convert.ChangeType(value, typeof(T));
+
+            throw new InvalidCastException();
+        }
+
+        public static T ValidateInputsUsingRegex<T>(Regex regex, Enum ConsoleColor, string input = "Enter Input", string errorMessage = "Invalid Input")
+        {
+            DisplayMessages(System.ConsoleColor.Yellow, input);
+
+            string? value = Console.ReadLine();
+
+            while (string.IsNullOrWhiteSpace(value) || !regex.IsMatch(value))
+            {
+                Console.Write($"{errorMessage}\nTry again : ");
+
+                value = Console.ReadLine()!;
+            }
+
             return (T)Convert.ChangeType(value, typeof(T));
 
             throw new InvalidCastException();

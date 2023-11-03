@@ -10,12 +10,14 @@ namespace ExpenseTrackerTests
         Services serviceInstance;
         UserAuthentication userAuthenticationInstance;
         User userInstance;
+        Logger loggerInstance;
         public ExpenseTrackerApplicationTests()
         {
-            Category categoryInstance= new Category();
-            serviceInstance = new Services(categoryInstance);
-            fileManagerInstance = new FileManager(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
-            userAuthenticationInstance = new UserAuthentication(fileManagerInstance, serviceInstance, categoryInstance);
+            loggerInstance = new Logger(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Log.txt"));
+            categoryInstance = new Category();
+            serviceInstance = new Services(categoryInstance, loggerInstance);
+            fileManagerInstance = new FileManager(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), loggerInstance);
+            userAuthenticationInstance = new UserAuthentication(fileManagerInstance, serviceInstance, categoryInstance, loggerInstance);
         }
 
 
@@ -62,10 +64,10 @@ namespace ExpenseTrackerTests
 
         [Theory]
         [InlineData("Lipika", "Lipi")]
-        public async void UserNameAndPassword_LoggingOut_IsLoggedOut(string userName, string userPassword)
+        public async Task UserNameAndPassword_LoggingOut_IsLoggedOut(string userName, string userPassword)
         {
             //Arrange
-            User user = new User(userName, userPassword, categoryInstance, serviceInstance);
+            User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
             ActiveUsers.ActiveUser = user.UserName;
 
             //Act
@@ -73,6 +75,34 @@ namespace ExpenseTrackerTests
 
             //Assert
             Assert.True(ActiveUsers.ActiveUser == null);
+        }
+
+        [Theory]
+        [InlineData("Lipika", "Lipi")]
+        public void UserNameAndPassword_LoggingIn_IsLoggedIn(string userName, string userPassword)
+        {
+            //Arrange
+            User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
+
+            //Act
+            bool isLogged =  fileManagerInstance.LogInDetailsToFile(userName, userPassword, user);
+
+            //Assert
+            Assert.True(isLogged);
+        }
+
+        [Theory]
+        [InlineData("Test", "TestName")]
+        public void UserNameAndPassword_IncorrectLoggingDetails_IsLoggedIn(string userName, string userPassword)
+        {
+            //Arrange
+            User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
+
+            //Act
+            bool isLogged = fileManagerInstance.LogInDetailsToFile(userName, userPassword, user);
+
+            //Assert
+            Assert.False(isLogged);
         }
 
         [Theory]
@@ -91,69 +121,90 @@ namespace ExpenseTrackerTests
         public void UserNameAndPassword_AddingIncome_IsIncomeAdded(string userName, string password)
         {
             //Arrange
-            User user = new User(userName, password, categoryInstance, serviceInstance);
-            Income income = new Income(DateOnly.Parse("2023/10/10"), "Food",555, ModesOfCash.Cash, "From Testing!", 5.0);
+            User user = new User(userName, password, categoryInstance, serviceInstance, loggerInstance);
+            Income income = new Income(DateOnly.Parse("2023/10/10"), "Food", 555, ModesOfCash.Cash, "From Testing!", 5);
 
             //Act
-            user.AddIncome(income);
+            user.Incomes.Add(income);
 
             //Assert
             Assert.Contains(income, user.Incomes);
         }
 
+        [Fact]
+        public void UserNameAndPassword_WhenAddingNullIncome_IsExceptionThrown()
+        {
+            //Arrange
+            User user = new User("Lipika", "Lipi", categoryInstance, serviceInstance, loggerInstance);
+            Income income = null;
+
+            //Assert
+            Assert.Throws<Exception>(() => user.AddIncome(income));
+        }
         [Theory]
         [InlineData("Lipika", "Lipi")]
         public void UserNameAndPassword_AddingExpense_IsExpenseAdded(string userName, string password)
         {
             //Arrange
-            User user = new User(userName, password, categoryInstance, serviceInstance);
-            Expense expense = new Expense(DateOnly.Parse("2023/10/10"), "Food", 555, ModesOfCash.Cash, "From Testing!", 5.0);
+            User user = new User(userName, password, categoryInstance, serviceInstance, loggerInstance);
+            Expense expense = new Expense(DateOnly.Parse("2023/10/10"), "Food", 555, ModesOfCash.Cash, "From Testing!", 5);
 
             //Act
-            user.AddExpense(expense);
+            user.Expenses.Add(expense);
 
             //Assert
             Assert.Contains(expense, user.Expenses);
         }
 
-        [Theory]
-        [InlineData("Lipika", "Lipi", 10.0)]
-        public void UserNamePasswordAndTotalExpense_TotalExpense_ExpectedOutput(string userName, string password, double expectedOutput)
+        [Fact]
+        public void UserNameAndPassword_WhenAddingNullExpense_IsExceptionThrown()
         {
             //Arrange
-            User user = new User(userName, password, categoryInstance, serviceInstance);
+            User user = new User("Lipika", "Lipi", categoryInstance, serviceInstance, loggerInstance);
+            Expense expense = null;
 
-            Expense expense1 = new Expense(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.Cash, "From Testing!", 5.0);
-            user.AddExpense(expense1);
+            //Assert
+            Assert.Throws<Exception>(() => user.AddExpense(expense));
+        }
 
-            Expense expense2 = new Expense(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.Cash, "From Testing!", 5.0);
-            user.AddExpense(expense2);
+        [Theory]
+        [InlineData("Lipika", "Lipi", 10)]
+        public void UserNamePasswordAndTotalExpense_TotalExpense_ExpectedOutput(string userName, string password, decimal expectedOutput)
+        {
+            //Arrange
+            User user = new User(userName, password, categoryInstance, serviceInstance, loggerInstance);
+
+            Expense expense1 = new Expense(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.Cash, "From Testing!", 5);
+            user.Expenses.Add(expense1);
+
+            Expense expense2 = new Expense(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.Cash, "From Testing!", 5);
+            user.Expenses.Add(expense2);
 
             //Act
-            double actualOutput = user.ViewTotalExpense(user);
+            decimal actualOutput = user.ViewTotalExpense(user);
 
             //Assert
             Assert.Equal(expectedOutput, actualOutput);
         }
 
         [Theory]
-        [InlineData("Lipika", "Lipi", 10.0)]
+        [InlineData("Lipika", "Lipi", 10)]
         public void UserNamePasswordAndTotalIncome_TotalIncome_ExpectedOutput(string userName, string password, double expectedOutput)
         {
             //Arrange
-            User user = new User(userName, password, categoryInstance, serviceInstance);
+            User user = new User(userName, password, categoryInstance, serviceInstance, loggerInstance);
 
-            Income income1 = new Income(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.Cash, "From Testing!", 5.0);
-            user.AddIncome(income1);
+            Income income1 = new Income(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.Cash, "From Testing!", 5);
+            user.Incomes.Add(income1);
 
-            Income income2 = new Income(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.Cash, "From Testing!", 5.0);
-            user.AddIncome(income2);
+            Income income2 = new Income(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.Cash, "From Testing!", 5);
+            user.Incomes.Add(income2);
 
             //Act
-            double actualOutput = user.ViewTotalIncome(user);
+            decimal actualOutput = user.ViewTotalIncome(user);
 
             //Assert
-            Assert.Equal(expectedOutput, actualOutput);
+            Assert.Equal(expectedOutput.ToString(), actualOutput.ToString());
         }
 
         [Theory]
@@ -161,33 +212,33 @@ namespace ExpenseTrackerTests
         public void UserNamePasswordAndIndexAndValueToUpdate_UpdateDateForExpense_IsUpdated(string userName, string userPassword, int indexToUpdate, string expectedOutput)
         {
             //Arrange
-            User user = new User(userName, userPassword, categoryInstance, serviceInstance);
+            User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
 
-            Expense expenseData = new Expense(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.Cash, "From Testing!", 5.0);
-            user.AddExpense(expenseData);
+            Expense expenseData = new Expense(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.Cash, "From Testing!", 5);
+            user.Expenses.Add(expenseData);
 
             //Act
             user.UpdateDateForExpense(indexToUpdate, DateOnly.Parse(expectedOutput));
 
             //Arrange
-            Assert.Equal(DateOnly.Parse(expectedOutput),user.Expenses[indexToUpdate - 1].DateOnly);
+            Assert.Equal(DateOnly.Parse(expectedOutput), user.Expenses[indexToUpdate - 1].DateOnly);
         }
 
         [Theory]
-        [InlineData("TestName", "TestPassword", 1, 10.0)]
-        public void UserNamePasswordAndIndexAndValueToUpdate_UpdateAmountForExpense_IsUpdated(string userName, string userPassword, int indexToUpdate, double expectedOutput)
+        [InlineData("TestName", "TestPassword", 1, 10)]
+        public void UserNamePasswordAndIndexAndValueToUpdate_UpdateAmountForExpense_IsUpdated(string userName, string userPassword, int indexToUpdate, decimal expectedOutput)
         {
             //Arrange
-            User user = new User(userName, userPassword, categoryInstance, serviceInstance);
+            User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
 
-            Expense expenseData = new Expense(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.Cash, "From Testing!", 5.0);
+            Expense expenseData = new Expense(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.Cash, "From Testing!", 5);
 
             //Act
-            user.AddExpense(expenseData);
+            user.Expenses.Add(expenseData);
             user.UpdateAmountForExpense(indexToUpdate, expectedOutput);
 
             //Assert
-            Assert.Equal(expectedOutput,user.Expenses[indexToUpdate - 1].Amount);
+            Assert.Equal(expectedOutput, user.Expenses[indexToUpdate - 1].Amount);
         }
 
         [Theory]
@@ -195,11 +246,11 @@ namespace ExpenseTrackerTests
         public void UserNamePasswordAndIndexAndValueToUpdate_UpdateModeOfCashForExpense_IsUpdated(string userName, string userPassword, int indexToUpdate, ModesOfCash mode)
         {
             //Arrange
-            User user = new User(userName, userPassword, categoryInstance, serviceInstance);
-            Expense expenseData = new Expense(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.Cash, "From Testing!", 5.0);
-            
+            User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
+            Expense expenseData = new Expense(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.Cash, "From Testing!", 5);
+
             //Act
-            user.AddExpense(expenseData);
+            user.Expenses.Add(expenseData);
             user.UpdateModeOfCashForExpense(indexToUpdate, mode);
 
             //Assert
@@ -211,11 +262,11 @@ namespace ExpenseTrackerTests
         public void UserNamePasswordAndIndexAndValueToUpdate_UpdateAccountNumberForExpense_IsUpdated(string userName, string userPassword, int indexToUpdate, int expectedOuput)
         {
             //Arrange
-            User user = new User(userName, userPassword, categoryInstance, serviceInstance);
-            Expense expenseData = new Expense(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.Cash, "From Testing!", 5.0);
-            
+            User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
+            Expense expenseData = new Expense(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.Cash, "From Testing!", 5);
+
             //Act
-            user.AddExpense(expenseData);
+            user.Expenses.Add(expenseData);
             user.UpdateAccountNumberForExpense(indexToUpdate, expectedOuput);
 
             //Assert
@@ -227,11 +278,11 @@ namespace ExpenseTrackerTests
         public void UserNamePasswordAndIndexAndValueToUpdate_UpdateCategoryForExpense_IsUpdated(string userName, string userPassword, int indexToUpdate, string expectedOuput)
         {
             //Arrange
-            User user = new User(userName, userPassword, categoryInstance, serviceInstance);
-            Expense expenseData = new Expense(DateOnly.Parse("2023/10/10"), "Groceries", 5, ModesOfCash.Cash, "From Testing!", 5.0);
-            
+            User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
+            Expense expenseData = new Expense(DateOnly.Parse("2023/10/10"), "Groceries", 5, ModesOfCash.Cash, "From Testing!", 5);
+
             //Act
-            user.AddExpense(expenseData);
+            user.Expenses.Add(expenseData);
             user.UpdateCategoryForExpense(indexToUpdate, expectedOuput);
 
             //Assert
@@ -243,11 +294,11 @@ namespace ExpenseTrackerTests
         public void UserNamePasswordAndIndexAndValueToUpdate_UpdateNotesForExpense_IsUpdated(string userName, string userPassword, int indexToUpdate, string expectedOuput)
         {
             //Arrange
-            User user = new User(userName, userPassword, categoryInstance, serviceInstance);
-            Expense expenseData = new Expense(DateOnly.Parse("2023/10/10"), "Groceries", 5, ModesOfCash.Cash, "From Testing!", 5.0);
-            
+            User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
+            Expense expenseData = new Expense(DateOnly.Parse("2023/10/10"), "Groceries", 5, ModesOfCash.Cash, "From Testing!", 5);
+
             //Act
-            user.AddExpense(expenseData);
+            user.Expenses.Add(expenseData);
             user.UpdateNotesForExpense(indexToUpdate, expectedOuput);
 
             //Assert
@@ -259,11 +310,11 @@ namespace ExpenseTrackerTests
         public void UserNamePasswordAndIndexAndValueToUpdate_UpdateDateForIncome_IsUpdated(string userName, string userPassword, int indexToUpdate, string expectedOuput)
         {
             //Arrange
-            User user = new User(userName, userPassword, categoryInstance, serviceInstance);
-            Income income = new Income(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.Cash, "From Testing!", 5.0);
-            
+            User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
+            Income income = new Income(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.Cash, "From Testing!", 5);
+
             //Act
-            user.AddIncome(income);
+            user.Incomes.Add(income);
             user.UpdateDateForIncome(indexToUpdate, DateOnly.Parse(expectedOuput));
 
             //Assert
@@ -272,15 +323,15 @@ namespace ExpenseTrackerTests
         }
 
         [Theory]
-        [InlineData("TestName", "TestPassword", 1, 10.0)]
-        public void UserNamePasswordAndIndexAndValueToUpdate_UpdateAmountForIncome_IsUpdated(string userName, string userPassword, int indexToUpdate, double expectedOutput)
+        [InlineData("TestName", "TestPassword", 1, 10)]
+        public void UserNamePasswordAndIndexAndValueToUpdate_UpdateAmountForIncome_IsUpdated(string userName, string userPassword, int indexToUpdate, decimal expectedOutput)
         {
             //Arrange
-            User user = new User(userName, userPassword, categoryInstance, serviceInstance);
-            Income income = new Income(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.Cash, "From Testing!", 5.0);
-            
+            User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
+            Income income = new Income(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.Cash, "From Testing!", 5);
+
             //Act
-            user.AddIncome(income);
+            user.Incomes.Add(income);
             user.UpdateAmountForIncome(indexToUpdate, expectedOutput);
 
             //Assert
@@ -292,11 +343,11 @@ namespace ExpenseTrackerTests
         public void UserNamePasswordAndIndexAndValueToUpdate_UpdateModeOfCashForIncome_IsUpdated(string userName, string userPassword, int indexToUpdate, ModesOfCash mode)
         {
             //Arrange
-            User user = new User(userName, userPassword, categoryInstance, serviceInstance);
-            Income income = new Income(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.ECash, "From Testing!", 5.0);
-            
+            User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
+            Income income = new Income(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.ECash, "From Testing!", 5);
+
             //Act
-            user.AddIncome(income);
+            user.Incomes.Add(income);
             user.UpdateModeOfCashForIncome(indexToUpdate, mode);
 
             //Assert
@@ -310,11 +361,11 @@ namespace ExpenseTrackerTests
         public void UserNamePasswordAndIndexAndValueToUpdate_UpdateAccountNumberForIncome_IsUpdated(string userName, string userPassword, int indexToUpdate, int expectedOuput)
         {
             //Arrange
-            User user = new User(userName, userPassword, categoryInstance, serviceInstance);
-            Income income = new Income(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.Cash, "From Testing!", 5.0);
-            
+            User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
+            Income income = new Income(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.Cash, "From Testing!", 5);
+
             //Act
-            user.AddIncome(income);
+            user.Incomes.Add(income);
             user.UpdateAccountNumberForIncome(indexToUpdate, expectedOuput);
 
             //Assert
@@ -326,11 +377,11 @@ namespace ExpenseTrackerTests
         public void UserNamePasswordAndIndexAndValueToUpdate_UpdateCategoryForIncome_IsUpdated(string userName, string userPassword, int indexToUpdate, string expectedOuput)
         {
             //Arrange
-            User user = new User(userName, userPassword, categoryInstance, serviceInstance);
-            Income income = new Income(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.Cash, "From Testing!", 5.0);
+            User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
+            Income income = new Income(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.Cash, "From Testing!", 5);
 
             //Act
-            user.AddIncome(income);
+            user.Incomes.Add(income);
             user.UpdateCategoryForIncome(indexToUpdate, expectedOuput);
 
             //Assert
@@ -342,11 +393,11 @@ namespace ExpenseTrackerTests
         public void UserNamePasswordAndIndexAndValueToUpdate_UpdateNotesForIncome_IsUpdated(string userName, string userPassword, int indexToUpdate, string expectedOuput)
         {
             //Arrange
-            User user = new User(userName, userPassword, categoryInstance, serviceInstance);
-            Income income = new Income(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.Cash, "From Testing!", 5.0);
+            User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
+            Income income = new Income(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.Cash, "From Testing!", 5);
 
             //Act
-            user.AddIncome(income);
+            user.Incomes.Add(income);
             user.UpdateNotesForIncome(indexToUpdate, expectedOuput);
 
             //Assert
@@ -354,42 +405,81 @@ namespace ExpenseTrackerTests
         }
 
         [Theory]
-        [InlineData("TestName", "TestPassword", 2, "NotesForIncome")]
-        public void UserNamePasswordAndIndexAndValueToDelete_DeleteIncome_IsDeleted(string userName, string userPassword, int indexToUpdate, string expectedOutput)
+        [InlineData("TestName", "TestPassword", 1, "NotesForIncome")]
+        public void UserNamePasswordAndIndexAndValueToDelete_DeleteIncome_IsDeleted(string userName, string userPassword, int indexToDelete, string expectedOutput)
         {
             //Arrange
-            User user = new User(userName, userPassword, categoryInstance, serviceInstance);
-            Income income1 = new Income(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.Cash, "From Testing!", 5.0);
-            Income income2 = new Income(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.Cash, "From Testing!", 5.0);
-            
-            //Act
-            user.AddIncome(income1);
-            user.AddIncome(income2);
+            User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
+            Income income1 = new Income(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.Cash, "From Testing!", 5);
+            Income income2 = new Income(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.Cash, "From Testing!", 5);
 
-            user.DeleteIncome(indexToUpdate, user);
+            //Act
+
+            user.Incomes.Add(income1);
+            user.Incomes.Add(income2);
+
+            user.DeleteIncome(indexToDelete, user);
 
             //Assert
-            Assert.Equal(indexToUpdate - 1 , user.Incomes.Count);
+            Assert.Equal(indexToDelete , user.Incomes.Count);
 
         }
 
         [Theory]
-        [InlineData("TestName", "TestPassword", 2, "NotesForIncome")]
-        public void UserNamePasswordAndIndexAndValueToDelete_DeleteExpense_IsDeleted(string userName, string userPassword, int indexToUpdate, string expectedOutput)
+        [InlineData("TestName", "TestPassword", 3, "NotesForIncome")]
+        public void UserNamePasswordAndIndexAndValueToDelete_DeleteIncomeWhenIndexNotValid_IsExceptionThrown(string userName, string userPassword, int indexToUpdate, string expectedOutput)
         {
             //Arrange
-            User user = new User(userName, userPassword, categoryInstance, serviceInstance);
-            Expense expenseData1 = new Expense(DateOnly.Parse("2023/10/10"), "Groceries", 5, ModesOfCash.Cash, "From Testing!", 5.0);
-            Expense expenseData2 = new Expense(DateOnly.Parse("2023/10/10"), "Groceries", 5, ModesOfCash.Cash, "From Testing!", 5.0);
-            
-            //Act
-            user.AddExpense(expenseData1);
-            user.AddExpense(expenseData2);
+            User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
+            Income income1 = new Income(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.Cash, "From Testing!", 5);
+            Income income2 = new Income(DateOnly.Parse("2023/10/10"), "Food", 5, ModesOfCash.Cash, "From Testing!", 5);
 
-            user.DeleteExpense(indexToUpdate, user);
+            //Act
+            user.Incomes.Add(income1);
+            user.Incomes.Add(income2);
 
             //Assert
-            Assert.Equal(indexToUpdate - 1, user.Expenses.Count);
+            Assert.Throws<Exception>(() => user.DeleteIncome(indexToUpdate, user));
+
+        }
+
+
+
+        [Theory]
+        [InlineData("TestName", "TestPassword", 1, "NotesForIncome")]
+        public void UserNamePasswordAndIndexAndValueToDelete_DeleteExpense_IsDeleted(string userName, string userPassword, int indexToDelete, string expectedOutput)
+        {
+            //Arrange
+            User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
+            Expense expenseData1 = new Expense(DateOnly.Parse("2023/10/10"), "Groceries", 5, ModesOfCash.Cash, "From Testing!", 5);
+            Expense expenseData2 = new Expense(DateOnly.Parse("2023/10/10"), "Groceries", 5, ModesOfCash.Cash, "From Testing!", 5);
+
+            //Act
+            user.Expenses.Add(expenseData1);
+            user.Expenses.Add(expenseData2);
+
+            user.DeleteExpense(indexToDelete, user);
+
+            //Assert
+            Assert.Equal(indexToDelete , user.Expenses.Count);
+        }
+
+        [Theory]
+        [InlineData("TestName", "TestPassword", 3, "NotesForIncome")]
+        public void UserNamePasswordAndIndexAndValueToDelete_DeleteExpenseWhenIndexNotValid_IsExceptionThrown(string userName, string userPassword, int indexToUpdate, string expectedOutput)
+        {
+            //Arrange
+            User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
+            Expense expenseData1 = new Expense(DateOnly.Parse("2023/10/10"), "Groceries", 5, ModesOfCash.Cash, "From Testing!", 5);
+            Expense expenseData2 = new Expense(DateOnly.Parse("2023/10/10"), "Groceries", 5, ModesOfCash.Cash, "From Testing!", 5);
+
+            //Act
+            user.Expenses.Add(expenseData1);
+            user.Expenses.Add(expenseData2);
+
+            //Assert
+            Assert.Throws<Exception>(() => user.DeleteExpense(indexToUpdate, user));
+
         }
 
         [Theory]
@@ -397,7 +487,7 @@ namespace ExpenseTrackerTests
         public void UserNamePassword_CreatingFileNamedAsUserName_IsFileCreated(string userName, string userPassword, string expectedOutput)
         {
             //Arrange
-            User user = new User(userName, userPassword, categoryInstance, serviceInstance);
+            User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
 
             //Act
             var actualOutput = fileManagerInstance.fileName(user);
@@ -411,13 +501,27 @@ namespace ExpenseTrackerTests
         public void UserNamePassword_LogInDetailsToFile_IsLogin(string userName, string userPassword, string expectedOutput)
         {
             //Arrange
-            User user = new User(userName, userPassword, categoryInstance, serviceInstance);
+            User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
 
             //Act
             var actualOutput = fileManagerInstance.LogInDetailsToFile(userName, userPassword, user);
 
             //Assert
             Assert.True(actualOutput);
+        }
+
+        [Theory]
+        [InlineData("Lipika", "Lipi", "{\"UserName\":\"Lipika\",\"Password\":{\"EncodedPassword\":\"TGlwaQ==\"},\"Incomes\":[],\"Expenses\":[]}")]
+        public void UserNamePassword_SerializeObject_SerializedData(string userName, string userPassword, string expectedOutput)
+        {
+            //Arrange
+            User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
+
+            //Act
+            var actualOuput = fileManagerInstance.SerializeFile(user);
+
+            //Assert
+            Assert.Equal(expectedOutput, actualOuput);
         }
 
     }

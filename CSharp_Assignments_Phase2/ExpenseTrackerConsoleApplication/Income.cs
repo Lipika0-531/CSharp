@@ -22,7 +22,7 @@ namespace ExpenseTrackerConsoleApplication
         /// <param name="amountModes">AmountModes</param>
         /// <param name="note">Notes</param>
         /// <param name="account">Account</param>
-        public Income(DateOnly date, string category, int account, ModesOfCash amountModes,string note, double amount = 0) 
+        public Income(DateOnly date, string category, int account, ModesOfCash amountModes,string note, decimal amount = 0) 
         {
             DateOnly = date;
             Category = category;

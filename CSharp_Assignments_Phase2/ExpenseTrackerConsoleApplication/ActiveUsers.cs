@@ -12,8 +12,8 @@ namespace ExpenseTrackerConsoleApplication
     public class ActiveUsers
     {
         /// <summary>
-        /// List of users that are active.
+        /// List of Users that are active.
         /// </summary>
-        public static string? ActiveUser {get; set;}
+        public static User? ActiveUser {get; set;}
     }
 }

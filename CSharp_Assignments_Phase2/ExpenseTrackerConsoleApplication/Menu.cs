@@ -35,131 +35,64 @@ namespace ExpenseTrackerConsoleApplication
         /// <returns>Task</returns>
         public async Task UserMenu()
         {
-            try
+
+            bool isExited = false;
+            while (!isExited)
             {
-                bool isExited = false;
-                while (!isExited)
+                Parser.DisplayMessages(ConsoleColor.Cyan, "1. Add Income");
+                Parser.DisplayMessages(ConsoleColor.Cyan, "2. Add Expense");
+                Parser.DisplayMessages(ConsoleColor.Cyan, "3. View Income");
+                Parser.DisplayMessages(ConsoleColor.Cyan, "4. View Expense");
+                Parser.DisplayMessages(ConsoleColor.Cyan, "5. Update Income");
+                Parser.DisplayMessages(ConsoleColor.Cyan, "6. Update Expense");
+                Parser.DisplayMessages(ConsoleColor.Cyan, "7. Delete Income");
+                Parser.DisplayMessages(ConsoleColor.Cyan, "8. Delete Expense");
+                Parser.DisplayMessages(ConsoleColor.Cyan, "9. View Statistics");
+                Parser.DisplayMessages(ConsoleColor.Cyan, "10. Exit");
+
+                Console.Write("Choose option : ");
+
+                if (Enum.TryParse(Console.ReadLine(), out MenuOptions option))
                 {
-                    Parser.DisplayMessages(ConsoleColor.Cyan, "1. Add Income");
-                    Parser.DisplayMessages(ConsoleColor.Cyan, "2. Add Expense");
-                    Parser.DisplayMessages(ConsoleColor.Cyan, "3. View Income");
-                    Parser.DisplayMessages(ConsoleColor.Cyan, "4. View Expense");
-                    Parser.DisplayMessages(ConsoleColor.Cyan, "5. Update Income");
-                    Parser.DisplayMessages(ConsoleColor.Cyan, "6. Update Expense");
-                    Parser.DisplayMessages(ConsoleColor.Cyan, "7. Delete Income");
-                    Parser.DisplayMessages(ConsoleColor.Cyan, "8. Delete Expense");
-                    Parser.DisplayMessages(ConsoleColor.Cyan, "9. View Statistics");
-                    Parser.DisplayMessages(ConsoleColor.Cyan, "10. Exit");
-
-                    Console.Write("Choose option : ");
-
-                    if (Enum.TryParse(Console.ReadLine(), out MenuOptions option))
+                    try
                     {
                         switch (option)
                         {
                             case MenuOptions.AddIncome:
-                                if (ActiveUsers.ActiveUser == user!.UserName)
-                                {
-                                    Parser.DisplayMessages(ConsoleColor.Yellow, "Add Income");
-                                    Income incomeToAdd = services.GetPropertiesOfIncome();
-                                    user?.AddIncome(incomeToAdd);
-                                }
-                                else
-                                {
-                                    Parser.DisplayMessages(ConsoleColor.Red, "Login or SignUp !");
-                                }
-
+                                Parser.DisplayMessages(ConsoleColor.Yellow, "Add Income");
+                                Income incomeToAdd = services.GetPropertiesOfIncome();
+                                user?.AddIncome(incomeToAdd);
                                 break;
                             case MenuOptions.AddExpense:
-
-                                if (ActiveUsers.ActiveUser == user!.UserName)
-                                {
-                                    Parser.DisplayMessages(ConsoleColor.Yellow, "Add Income");
-                                    Expense expenseToAdd = services.GetPropertiesOfExpense();
-                                    user?.AddExpense(expenseToAdd);
-                                }
-                                else
-                                {
-                                    Parser.DisplayMessages(ConsoleColor.Red, "Login or SignUp !");
-                                }
+                                Parser.DisplayMessages(ConsoleColor.Yellow, "Add Expense");
+                                Expense expenseToAdd = services.GetPropertiesOfExpense();
+                                user?.AddExpense(expenseToAdd);
                                 break;
                             case MenuOptions.ViewIncomes:
-                                if (ActiveUsers.ActiveUser == user!.UserName)
-                                {
-                                    Parser.DisplayMessages(ConsoleColor.Yellow, "View Income ");
-                                    user?.ViewIncome(user);
-                                }
-                                else
-                                {
-                                    Parser.DisplayMessages(ConsoleColor.Red, "Login or SignUp !");
-                                }
+                                Parser.DisplayMessages(ConsoleColor.Yellow, "View Income ");
+                                user?.ViewIncome(user);
                                 break;
                             case MenuOptions.ViewExpenses:
-                                if (ActiveUsers.ActiveUser == user!.UserName)
-                                {
-                                    Parser.DisplayMessages(ConsoleColor.Yellow, "View Expense ");
-                                    user?.ViewExpense(user);
-                                }
-                                else
-                                {
-                                    Parser.DisplayMessages(ConsoleColor.Red, "Login or SignUp !");
-                                }
-
+                                Parser.DisplayMessages(ConsoleColor.Yellow, "View Expense ");
+                                user?.ViewExpense(user);
                                 break;
                             case MenuOptions.UpdateIncomes:
-                                if (ActiveUsers.ActiveUser == user!.UserName)
-                                {
-                                    user.UpdatingValuesForUserIncome(user);
-                                }
-                                else
-                                {
-                                    Parser.DisplayMessages(ConsoleColor.Red, "Login or SignUp !");
-                                }
+                                user?.UpdatingValuesForUserIncome(user);
                                 break;
                             case MenuOptions.UpdateExpenses:
-                                if (ActiveUsers.ActiveUser == user!.UserName)
-                                {
-                                    user.UpdatingValuesForExpense(user);
-                                }
-                                else
-                                {
-                                    Parser.DisplayMessages(ConsoleColor.Red, "Login or SignUp !");
-                                }
+                                user?.UpdatingValuesForExpense(user);
                                 break;
                             case MenuOptions.RemoveIncome:
-                                if (ActiveUsers.ActiveUser == user!.UserName)
-                                {
-                                    user?.DisplayDeleteMessageForIncome(user);
-                                }
-                                else
-                                {
-                                    Parser.DisplayMessages(ConsoleColor.Red, "Login or SignUp !");
-                                }
+                                user?.DisplayDeleteMessageForIncome(user);
                                 break;
                             case MenuOptions.RemoveExpense:
-                                if (ActiveUsers.ActiveUser == user!.UserName)
-                                {
-                                    user?.DisplayDeleteMessageForExpense(user);
-                                }
-                                else
-                                {
-                                    Parser.DisplayMessages(ConsoleColor.Red, "Login or SignUp !");
-                                }
+                                user?.DisplayDeleteMessageForExpense(user);
                                 break;
                             case MenuOptions.ViewStatistic:
-                                if (ActiveUsers.ActiveUser == user!.UserName)
-                                {
-                                    user?.ViewTotalExpense(user);
-                                    user?.ViewTotalIncome(user);
-                                }
-                                else
-                                {
-                                    Parser.DisplayMessages(ConsoleColor.Red, "Login or SignUp !");
-                                }
+                                user?.ViewBalance(user);
                                 break;
-                           
                             case MenuOptions.Exit:
-                                ActiveUsers.ActiveUser = user!.UserName;
+                                ActiveUsers.ActiveUser!.UserName = user!.UserName;
                                 Parser.DisplayMessages(ConsoleColor.DarkRed, "Exiting to Main Menu");
                                 isExited = true;
                                 break;
@@ -168,12 +101,13 @@ namespace ExpenseTrackerConsoleApplication
                                 break;
                         }
                     }
+                    catch (Exception ex)
+                    {
+                        Parser.DisplayMessages(ConsoleColor.Red, $"Error: {ex}");
+                    }
                 }
             }
-            catch (Exception ex)
-            {
-                Parser.DisplayMessages(ConsoleColor.Red,$"Error: {ex}");
-            }
+
         }
     }
 }

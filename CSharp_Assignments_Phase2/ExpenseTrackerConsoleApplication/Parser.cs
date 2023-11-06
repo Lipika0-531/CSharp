@@ -37,16 +37,16 @@ namespace ExpenseTrackerConsoleApplication
         /// <param name="errorMessage">ErrorMessage</param>
         /// <returns>T</returns>
         /// <exception cref="InvalidCastException">Exception</exception>
-        public static T ValidateInputs<T>(Enum ConsoleColor, string input = "Enter Input", string errorMessage = "Invalid Input")
+        public static T ValidateInputs<T>(string input = "Enter Input", string errorMessage = "Invalid Input")
         {
             DisplayMessages(System.ConsoleColor.Yellow, input);
 
             string value = Console.ReadLine()!;
 
-            while (string.IsNullOrWhiteSpace(value) && TypeDescriptor.GetConverter(typeof(T)).IsValid(value))
+            while (string.IsNullOrWhiteSpace(value) || !TypeDescriptor.GetConverter(typeof(T)).IsValid(value))
             {
                 DisplayMessages(System.ConsoleColor.Yellow, $"{errorMessage} Enter value : ");
-
+                 
                 value = Console.ReadLine()!;
             }
             return (T)Convert.ChangeType(value, typeof(T));
@@ -54,7 +54,17 @@ namespace ExpenseTrackerConsoleApplication
             throw new InvalidCastException();
         }
 
-        public static T ValidateInputsUsingRegex<T>(Regex regex, Enum ConsoleColor, string input = "Enter Input", string errorMessage = "Invalid Input")
+
+        /// <summary>
+        /// Validate inputs with regex.
+        /// </summary>
+        /// <typeparam name="T">Generic</typeparam>
+        /// <param name="regex">Regex</param>
+        /// <param name="input">Input</param>
+        /// <param name="errorMessage">ErrorMessage</param>
+        /// <returns>T</returns>
+        /// <exception cref="InvalidCastException">InvalidCastException if casting fails</exception>
+        public static T ValidateInputsUsingRegex<T>(Regex regex, string input = "Enter Input", string errorMessage = "Invalid Input")
         {
             DisplayMessages(System.ConsoleColor.Yellow, input);
 

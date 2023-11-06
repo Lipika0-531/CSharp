@@ -3,13 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace ExpenseTrackerConsoleApplication
 {
     public class UserAuthentication
     {
-        volatile int isLoggedIn = 0;
         FileManager fileManager;
         Services services;
         Category category;
@@ -31,7 +31,6 @@ namespace ExpenseTrackerConsoleApplication
         /// <returns>Task</returns>
         public async Task LogIn(string userName, string password, User user)
         {
-
             if (fileManager.LogInDetailsToFile(userName, password, user))
             {
                 int i = 0;
@@ -44,7 +43,8 @@ namespace ExpenseTrackerConsoleApplication
                         i++;
                     }
 
-                    ActiveUsers.ActiveUser = user.UserName;
+                    ActiveUsers.ActiveUser = user;
+                    ActiveUsers.ActiveUser!.UserName = user.UserName;
                     Parser.DisplayMessages(ConsoleColor.Green, $"\nSuccessfully Logged in ! \n Welcome {userName}");
                     logger.LogErrors($"\nSuccessfully Logged in ! \n Welcome {userName}");
                     Thread.Sleep(100);
@@ -93,35 +93,43 @@ namespace ExpenseTrackerConsoleApplication
         }
 
         /// <summary>
-        /// users will have user list.
+        /// Users list.
         /// </summary>
-        public static Dictionary<string, User> users = new Dictionary<string, User>();
+        public static Dictionary<string, User> Users = new Dictionary<string, User>();
+
 
         /// <summary>
-        /// Add user.
+        /// User SignIn.
         /// </summary>
         /// <param name="userName">userName</param>
         /// <param name="password">Password</param>
         /// <returns>Added User</returns>
         public User UserSignIn(string userName, string password, FileManager fileManager)
         {
-            var addUser = new User(userName, password, category, services, logger);
-            ActiveUsers.ActiveUser = addUser.UserName;
-            fileManager.WriteSignInDetailsToFile(addUser);
-            users[userName] = addUser;
-            return addUser;
+            var addedUser = new User(userName, password, category, services, logger);
+            if (!fileManager.WriteSignInDetailsToFile(addedUser))
+            {
+                return null;
+            }
+            else
+            {
+                Users[userName] = addedUser;
+                return addedUser;
+            }
+
+            
         }
 
         /// <summary>
         /// Check userName is unique.
         /// </summary>
         /// <param name="userName">userName</param>
-        /// <returns>string</returns>
+        /// <returns>Unique userName</returns>
         public string CheckIfUserNameUnique(string userName)
         {
-            while (users.ContainsKey(userName))
+            while (Users.ContainsKey(userName))
             {
-                userName = Parser.ValidateInputs<string>(ConsoleColor.Yellow, "UserName already taken, Enter valid UserName : ");
+                userName = Parser.ValidateInputs<string>("UserName already taken, Enter valid UserName : ");
                 logger.LogErrors("UserName already taken, Enter valid UserName : ");
             }
             return userName;

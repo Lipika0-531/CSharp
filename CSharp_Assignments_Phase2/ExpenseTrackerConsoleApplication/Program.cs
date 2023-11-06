@@ -25,7 +25,6 @@ namespace ExpenseTrackerConsoleApplication
 
             string userNameToSignUp = string.Empty;
             string passwordToSignUp = string.Empty;
-            ActiveUsers.ActiveUser = string.Empty;
 
             try
             {
@@ -46,23 +45,33 @@ namespace ExpenseTrackerConsoleApplication
                         {
                             case MainMenu.SignUp:
                                 Console.WriteLine("SignUp");
-                                userNameToSignUp = Parser.ValidateInputs<string>(ConsoleColor.Yellow, "Enter UserName : ");
-                                passwordToSignUp = Parser.ValidateInputs<string>(ConsoleColor.Yellow, "Enter Password : ");
+                                userNameToSignUp = Parser.ValidateInputs<string>("Enter UserName : ");
+                                passwordToSignUp = Parser.ValidateInputs<string>("Enter Password : ");
                                 userNameToSignUp = userAuthentication.CheckIfUserNameUnique(userNameToSignUp);
                                 user = userAuthentication.UserSignIn(userNameToSignUp, passwordToSignUp, fileManager);
-                                menu = new Menu(fileManager, category, services, userAuthentication, user);
-
-                                Console.WriteLine($"Active Users : {ActiveUsers.ActiveUser}");
+                                if(user != null)
+                                {
+                                    menu = new Menu(fileManager, category, services, userAuthentication, user);
+                                    Parser.DisplayMessages(ConsoleColor.Green,"Successfully signed up");
+                                }
+                                else
+                                {
+                                    break;
+                                }
                                 break;
                             case MainMenu.LogIn:
                                 Console.WriteLine("LogIn");
-                                string userNameToLogin = Parser.ValidateInputs<string>(ConsoleColor.Yellow, "Enter User Name : ");
-                                string passwordToLogin = Parser.ValidateInputs<string>(ConsoleColor.Yellow, "Enter Password : ");
+                                string userNameToLogin = Parser.ValidateInputs<string>("Enter User Name : ");
+                                string passwordToLogin = Parser.ValidateInputs<string>("Enter Password : ");
                                 User userLogin = new User(userNameToLogin, passwordToLogin, category, services, logger);
                                 await userAuthentication.LogIn(userNameToLogin, passwordToLogin, userLogin);
                                 user = userLogin;
                                 menu = new Menu(fileManager, category, services, userAuthentication, user);
-                                if(ActiveUsers.ActiveUser == user.UserName)
+                                if(ActiveUsers.ActiveUser == null)
+                                {
+                                    break;
+                                }
+                                else if(ActiveUsers.ActiveUser!.UserName == user.UserName)
                                 {
                                     await menu.UserMenu();
                                 }
@@ -71,17 +80,17 @@ namespace ExpenseTrackerConsoleApplication
 
                             case MainMenu.LogOut:
 
-                                if(ActiveUsers.ActiveUser == string.Empty || ActiveUsers.ActiveUser == null)
+                                if(ActiveUsers.ActiveUser == null)
                                 {
                                     Parser.DisplayMessages(ConsoleColor.Red, "Login or SignUp !");
                                 }
-                                else if (ActiveUsers.ActiveUser == user!.UserName)
+                                else if (ActiveUsers.ActiveUser!.UserName == user!.UserName)
                                 {
                                     Parser.DisplayMessages(ConsoleColor.Magenta, "Logging out !");
                                     logger.LogErrors("Logging out !");
 
                                     await userAuthentication.LogOut(user);
-                                    fileManager.WriteSignInDetailsToFile(user);
+                                    fileManager.WriteDetailsToFile(user);
                                 }
                                 else
                                 {

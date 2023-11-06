@@ -8,6 +8,10 @@ namespace ExpenseTrackerConsoleApplication
 {
     internal interface ILogger
     {
+        /// <summary>
+        /// Log errors.
+        /// </summary>
+        /// <param name="message">Message</param>
         public void LogErrors(string message);
     }
 }

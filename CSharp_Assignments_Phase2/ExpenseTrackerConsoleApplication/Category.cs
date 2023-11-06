@@ -15,5 +15,10 @@ namespace ExpenseTrackerConsoleApplication
         /// List of Category available.
         /// </summary>
         public List<string> Categories = new List<string>() { "Groceries", "Food", "Electronics", "Beauty"};
+
+        /// <summary>
+        /// List of Income Categories available.
+        /// </summary>
+        public List<string> IncomeCategories = new List<string>() { "Salary", "Loan", "Parent's Money", "Others" };
     }
 }

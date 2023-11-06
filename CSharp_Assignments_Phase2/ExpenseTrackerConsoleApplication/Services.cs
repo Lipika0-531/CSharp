@@ -11,7 +11,7 @@ namespace ExpenseTrackerConsoleApplication
     {
         Category category;
         Logger logger;
-        public Services( Category categoryInstance, Logger loggerInstance)
+        public Services(Category categoryInstance, Logger loggerInstance)
         {
             category = categoryInstance;
             logger = loggerInstance;
@@ -23,38 +23,35 @@ namespace ExpenseTrackerConsoleApplication
         /// <returns>Expense</returns>
         public Expense GetPropertiesOfExpense()
         {
-            try
+            DateOnly validDate;
+            string date = Parser.ValidateInputsUsingRegex<string>(Constants.regexForDate, "Enter Date (yyyy/mm/dd) : ");
+            while (!DateOnly.TryParse(date, out validDate))
             {
-                DateOnly date = DateOnly.Parse(Parser.ValidateInputsUsingRegex<string>(Constants.regexForDate,ConsoleColor.Yellow, "Enter Date (yyyy/mm/dd) : ").ToString());
-
-                var category = GetCategory();
-
-                var amountMode = Parser.ValidateInputsUsingRegex<int>(Constants.regexForModes, ConsoleColor.Yellow, "Choose Mode of cash : \n1. ECash \n2.Cash : ");
-
-                int account = 0;
-                ModesOfCash AmountMode;
-                if (amountMode == 1)
-                {
-                    AmountMode = ModesOfCash.ECash;
-                    account = Parser.ValidateInputsUsingRegex<int>(Constants.regexForAccountNumber, ConsoleColor.Yellow, "Enter Account Number : ");
-                }
-                else
-                {
-                    AmountMode = ModesOfCash.Cash;
-                }
-                var amount = Parser.ValidateInputsUsingRegex<decimal>(Constants.regexForAmount,ConsoleColor.Yellow, "Enter amount : ");
-
-                var note = Parser.ValidateInputs<string>(ConsoleColor.Yellow, "Enter notes : ");
-
-                var newExpense = new Expense(date, category, account, AmountMode, note, amount);
-                return newExpense;
+                date = Parser.ValidateInputsUsingRegex<string>(Constants.regexForDate, "Enter Date (yyyy/mm/dd) : ");
             }
-            catch (Exception ex)
+
+            var category = GetCategoryForExpense();
+
+            var amountMode = Parser.ValidateInputsUsingRegex<int>(Constants.regexForModes, "Choose Mode of cash : \n1.ECash \n2.Cash : ");
+
+            int account = 0;
+            ModesOfCash AmountMode;
+            if (amountMode == 1)
             {
-                Parser.DisplayMessages(ConsoleColor.Red, ex.Message);
-                logger.LogErrors(ex.Message);
-                return default!;
+                AmountMode = ModesOfCash.ECash;
+                account = Parser.ValidateInputsUsingRegex<int>(Constants.regexForAccountNumber, "Enter Account Number : ");
             }
+            else
+            {
+                AmountMode = ModesOfCash.Cash;
+            }
+            var amount = Parser.ValidateInputsUsingRegex<decimal>(Constants.regexForAmount, "Enter amount : ");
+
+            var note = Parser.ValidateInputs<string>("Enter notes : ");
+
+            var newExpense = new Expense(validDate, category, account, AmountMode, note, amount);
+            return newExpense;
+
         }
 
         /// <summary>
@@ -63,41 +60,38 @@ namespace ExpenseTrackerConsoleApplication
         /// <returns>Income</returns>
         public Income GetPropertiesOfIncome()
         {
-            try
+            DateOnly validDate;
+            string date = Parser.ValidateInputsUsingRegex<string>(Constants.regexForDate, "Enter Date (yyyy/mm/dd) : ");
+            while (!DateOnly.TryParse(date, out validDate))
             {
-                DateOnly date = DateOnly.Parse(Parser.ValidateInputsUsingRegex<string>(Constants.regexForDate,ConsoleColor.Yellow, "Enter Date (yyyy/mm/dd) : "));
-
-                var category = GetCategory();
-
-                int account = 0;
-
-                var amountMode = Parser.ValidateInputsUsingRegex<int>(Constants.regexForModes, ConsoleColor.Yellow, "Choose Mode of cash : \n1. ECash \n2.Cash : ");
-                ModesOfCash AmountMode;
-
-                if (amountMode == 1)
-                {
-                    AmountMode = ModesOfCash.ECash;
-                    account = Parser.ValidateInputsUsingRegex<int>(Constants.regexForAccountNumber, ConsoleColor.Yellow, "Enter Account Number : ");
-
-                }
-                else
-                {
-                    AmountMode = ModesOfCash.Cash;
-                }
-
-                var amount = Parser.ValidateInputsUsingRegex<decimal>(Constants.regexForAmount, ConsoleColor.Yellow, "Enter amount : ");
-
-                var note = Parser.ValidateInputs<string>(ConsoleColor.Yellow, "Enter notes : ");
-
-                var newIncome = new Income(date, category, account,AmountMode, note, amount);
-                return newIncome;
+                date = Parser.ValidateInputsUsingRegex<string>(Constants.regexForDate, "Enter Date (yyyy/mm/dd) : ");
             }
-            catch (Exception ex)
+
+            var category = GetCategoryForIncome();
+
+            int account = 0;
+
+            var amountMode = Parser.ValidateInputsUsingRegex<int>(Constants.regexForModes, "Choose Mode of cash : \n1.ECash \n2.Cash : ");
+            ModesOfCash AmountMode;
+
+            if (amountMode == 1)
             {
-                Parser.DisplayMessages(ConsoleColor.Red, ex.Message);
-                logger.LogErrors(ex.Message);
-                return default!;
+                AmountMode = ModesOfCash.ECash;
+                account = Parser.ValidateInputsUsingRegex<int>(Constants.regexForAccountNumber, "Enter Account Number : ");
+
             }
+            else
+            {
+                AmountMode = ModesOfCash.Cash;
+            }
+
+            var amount = Parser.ValidateInputsUsingRegex<decimal>(Constants.regexForAmount, "Enter amount : ");
+
+            var note = Parser.ValidateInputs<string>("Enter notes : ");
+
+            var newIncome = new Income(validDate, category, account, AmountMode, note, amount);
+            return newIncome;
+
 
         }
 
@@ -105,22 +99,50 @@ namespace ExpenseTrackerConsoleApplication
         /// Get category for expense and income.
         /// </summary>
         /// <returns>string</returns>
-        public string GetCategory()
+        public string GetCategoryForExpense()
         {
-            ConsoleTable categoryTable = new("Category Available ");
+            int i = 1;
+            ConsoleTable categoryTable = new("S.No", "Category");
             foreach (var categoryValue in this.category.Categories)
             {
-                categoryTable.AddRow(categoryValue);
+                categoryTable.AddRow(i, categoryValue);
+                i++;
             }
             categoryTable.Write();
 
-            var category = Parser.ValidateInputs<string>(ConsoleColor.Yellow, "Choose category from the above options : ");
+            var category = Parser.ValidateInputs<int>("Choose category from the above options : ");
 
-            while (!this.category.Categories.Contains(category))
+            while (this.category.Categories.Count < category)
             {
-                category = Parser.ValidateInputs<string>(ConsoleColor.Magenta, "Enter category was not found, Please enter valid category : ");
+                category = Parser.ValidateInputs<int>("Enter category was not found, Please enter valid category : ");
             }
-            return category;
+
+            return this.category.Categories.ElementAt(category - 1);
+        }
+
+        /// <summary>
+        /// Get category for income.
+        /// </summary>
+        /// <returns>category value</returns>
+        public string GetCategoryForIncome()
+        {
+            int i = 1;
+            ConsoleTable categoryTable = new("S.No", "Category");
+            foreach (var categoryValue in this.category.IncomeCategories)
+            {
+                categoryTable.AddRow(i, categoryValue);
+                i++;
+            }
+            categoryTable.Write();
+
+            var category = Parser.ValidateInputs<int>("Choose category from the above options : ");
+
+            while(this.category.IncomeCategories.Count < category)
+            {
+                category = Parser.ValidateInputs<int>("Enter category was not found, Please enter valid category : ");
+            }
+            
+            return this.category.IncomeCategories.ElementAt(category - 1);
         }
 
         /// <summary>
@@ -136,7 +158,7 @@ namespace ExpenseTrackerConsoleApplication
                 Console.WriteLine($"{i} . {updateValue}");
                 i++;
             }
-            int.TryParse(Console.ReadLine(), out int choice);
+            _ = int.TryParse(Console.ReadLine(), out int choice);
             return choice;
         }
     }

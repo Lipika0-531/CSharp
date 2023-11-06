@@ -8,19 +8,26 @@ namespace ExpenseTrackerConsoleApplication
 {
     public class Logger : ILogger
     {
-        private string _filePath;
+        /// <summary>
+        /// File Path.
+        /// </summary>
+        public string FilePath;
+
         public Logger(string filePath)
         {
-            _filePath = filePath;
+            FilePath = filePath;
         }
+
+        /// <summary>
+        /// Logs errors to file.
+        /// </summary>
+        /// <param name="message">Message to log</param>
         public void LogErrors(string message)
         {
             string timestamp = DateTime.Now.ToString();
             string logEntry = $"{timestamp},{message}";
-            using (StreamWriter writer = File.AppendText(_filePath))
-            {
-                writer.WriteLine(logEntry);
-            }
+            using StreamWriter writer = File.AppendText(FilePath);
+            writer.WriteLine(logEntry);
         }
     }
 }

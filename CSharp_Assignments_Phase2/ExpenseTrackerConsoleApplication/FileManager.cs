@@ -21,17 +21,27 @@ namespace ExpenseTrackerConsoleApplication
             logger = loggerInstance;
         }
 
-        private FileStream fileStream { get; set; }
-
-        private StreamWriter streamWriter { get; set; }
-        public string fileName(User user)
+        /// <summary>
+        /// Frame user filePath with userName.
+        /// </summary>
+        /// <param name="user">User details</param>
+        /// <returns>userFile Path</returns>
+        public string FrameUserFilePath(User user)
         {
             string userDetailsFile = $"{user.UserName}.json";
             return userDetailsFile;
         }
+
+        /// <summary>
+        /// Write Log in details to file.
+        /// </summary>
+        /// <param name="userNameLogin">userNameLogin</param>
+        /// <param name="loginPassword">loginPassword</param>
+        /// <param name="user">User details</param>
+        /// <returns>True if Logged In.</returns>
         public bool LogInDetailsToFile(string userNameLogin, string loginPassword, User user)
         {
-            string userDetailsFile = fileName(user);
+            string userDetailsFile = FrameUserFilePath(user);
 
             if (!File.Exists(Path.Combine(filePath, userDetailsFile)))
             {
@@ -59,22 +69,49 @@ namespace ExpenseTrackerConsoleApplication
             }
         }
 
+        /// <summary>
+        /// Write sign In details to file.
+        /// </summary>
+        /// <param name="user">user details</param>
+        /// <returns>if Signed in</returns>
         public bool WriteSignInDetailsToFile(User user)
         {
-            string userDetailsFile = fileName(user);
-
-            using (FileStream writer = File.Create(Path.Combine(filePath, userDetailsFile)))
+            string userDetailsFile = FrameUserFilePath(user);
+            if (File.Exists(Path.Combine(filePath, userDetailsFile)))
             {
-                using (StreamWriter sw = new StreamWriter(writer))
-                {
-                    string userData = SerializeFile(user);
-                    sw.Write(userData);
-                    return true;
-                }
+                Parser.DisplayMessages(ConsoleColor.Red, "User already exists ! Please LogIn !");
+                return false;
+            }
+            else
+            {
+                using FileStream writer = File.Create(Path.Combine(filePath, userDetailsFile));
+                using StreamWriter sw = new StreamWriter(writer);
+                string userData = SerializeFile(user);
+                sw.Write(userData);
+                return true;
             }
         }
 
-
+        /// <summary>
+        /// Writing back the user details.
+        /// </summary>
+        /// <param name="user">user</param>
+        public void WriteDetailsToFile(User user)
+        {
+            string userDetailsFile = FrameUserFilePath(user);
+            if (File.Exists(Path.Combine(filePath, userDetailsFile)))
+            {
+                using FileStream writer = File.OpenWrite(Path.Combine(filePath, userDetailsFile));
+                using StreamWriter sw = new StreamWriter(writer);
+                string userData = SerializeFile(user);
+                sw.Write(userData);
+            }
+        }
+        /// <summary>
+        /// Serialize file.
+        /// </summary>
+        /// <param name="user">user details</param>
+        /// <returns>user data</returns>
         public string SerializeFile(User user)
         {
             string jsonUserData = JsonConvert.SerializeObject(user);

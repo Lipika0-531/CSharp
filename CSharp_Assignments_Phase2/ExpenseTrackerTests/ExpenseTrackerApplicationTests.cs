@@ -68,7 +68,7 @@ namespace ExpenseTrackerTests
         {
             //Arrange
             User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
-            ActiveUsers.ActiveUser = user.UserName;
+            ActiveUsers.ActiveUser!.UserName = user.UserName;
 
             //Act
             await userAuthenticationInstance.LogOut(user);
@@ -136,7 +136,7 @@ namespace ExpenseTrackerTests
         {
             //Arrange
             User user = new User("Lipika", "Lipi", categoryInstance, serviceInstance, loggerInstance);
-            Income income = null;
+            Income income = null!;
 
             //Assert
             Assert.Throws<Exception>(() => user.AddIncome(income));
@@ -161,10 +161,10 @@ namespace ExpenseTrackerTests
         {
             //Arrange
             User user = new User("Lipika", "Lipi", categoryInstance, serviceInstance, loggerInstance);
-            Expense expense = null;
+            Expense expense = null!;
 
             //Assert
-            Assert.Throws<Exception>(() => user.AddExpense(expense));
+            Assert.Throws<Exception>(() => user.AddExpense(expense!));
         }
 
         [Theory]
@@ -259,7 +259,7 @@ namespace ExpenseTrackerTests
 
         [Theory]
         [InlineData("TestName", "TestPassword", 1, 555)]
-        public void UserNamePasswordAndIndexAndValueToUpdate_UpdateAccountNumberForExpense_IsUpdated(string userName, string userPassword, int indexToUpdate, int expectedOuput)
+        public void UserNamePasswordAndIndexAndValueToUpdate_UpdateAccountNumberForExpense_IsUpdated(string userName, string userPassword, int indexToUpdate, int expectedOutput)
         {
             //Arrange
             User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
@@ -267,15 +267,15 @@ namespace ExpenseTrackerTests
 
             //Act
             user.Expenses.Add(expenseData);
-            user.UpdateAccountNumberForExpense(indexToUpdate, expectedOuput);
+            user.UpdateAccountNumberForExpense(indexToUpdate, expectedOutput);
 
             //Assert
-            Assert.Equal(expectedOuput, user.Expenses[indexToUpdate - 1].Account);
+            Assert.Equal(expectedOutput, user.Expenses[indexToUpdate - 1].Account);
         }
 
         [Theory]
         [InlineData("TestName", "TestPassword", 1, "Food")]
-        public void UserNamePasswordAndIndexAndValueToUpdate_UpdateCategoryForExpense_IsUpdated(string userName, string userPassword, int indexToUpdate, string expectedOuput)
+        public void UserNamePasswordAndIndexAndValueToUpdate_UpdateCategoryForExpense_IsUpdated(string userName, string userPassword, int indexToUpdate, string expectedOutput)
         {
             //Arrange
             User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
@@ -283,15 +283,15 @@ namespace ExpenseTrackerTests
 
             //Act
             user.Expenses.Add(expenseData);
-            user.UpdateCategoryForExpense(indexToUpdate, expectedOuput);
+            user.UpdateCategoryForExpense(indexToUpdate, expectedOutput);
 
             //Assert
-            Assert.Equal(expectedOuput, user.Expenses[indexToUpdate - 1].Category);
+            Assert.Equal(expectedOutput, user.Expenses[indexToUpdate - 1].Category);
         }
 
         [Theory]
         [InlineData("TestName", "TestPassword", 1, "NotesForExpense")]
-        public void UserNamePasswordAndIndexAndValueToUpdate_UpdateNotesForExpense_IsUpdated(string userName, string userPassword, int indexToUpdate, string expectedOuput)
+        public void UserNamePasswordAndIndexAndValueToUpdate_UpdateNotesForExpense_IsUpdated(string userName, string userPassword, int indexToUpdate, string expectedOutput)
         {
             //Arrange
             User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
@@ -299,15 +299,15 @@ namespace ExpenseTrackerTests
 
             //Act
             user.Expenses.Add(expenseData);
-            user.UpdateNotesForExpense(indexToUpdate, expectedOuput);
+            user.UpdateNotesForExpense(indexToUpdate, expectedOutput);
 
             //Assert
-            Assert.Equal(expectedOuput, user.Expenses[indexToUpdate - 1].Note);
+            Assert.Equal(expectedOutput, user.Expenses[indexToUpdate - 1].Note);
         }
 
         [Theory]
         [InlineData("Test", "TestPassword", 1, "11/10/11")]
-        public void UserNamePasswordAndIndexAndValueToUpdate_UpdateDateForIncome_IsUpdated(string userName, string userPassword, int indexToUpdate, string expectedOuput)
+        public void UserNamePasswordAndIndexAndValueToUpdate_UpdateDateForIncome_IsUpdated(string userName, string userPassword, int indexToUpdate, string expectedOutput)
         {
             //Arrange
             User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
@@ -315,10 +315,10 @@ namespace ExpenseTrackerTests
 
             //Act
             user.Incomes.Add(income);
-            user.UpdateDateForIncome(indexToUpdate, DateOnly.Parse(expectedOuput));
+            user.UpdateDateForIncome(indexToUpdate, DateOnly.Parse(expectedOutput));
 
             //Assert
-            Assert.Equal(DateOnly.Parse(expectedOuput), user.Incomes[indexToUpdate - 1].DateOnly);
+            Assert.Equal(DateOnly.Parse(expectedOutput), user.Incomes[indexToUpdate - 1].DateOnly);
 
         }
 
@@ -358,7 +358,7 @@ namespace ExpenseTrackerTests
 
         [Theory]
         [InlineData("TestName", "TestPassword", 1, 555)]
-        public void UserNamePasswordAndIndexAndValueToUpdate_UpdateAccountNumberForIncome_IsUpdated(string userName, string userPassword, int indexToUpdate, int expectedOuput)
+        public void UserNamePasswordAndIndexAndValueToUpdate_UpdateAccountNumberForIncome_IsUpdated(string userName, string userPassword, int indexToUpdate, int expectedOutput)
         {
             //Arrange
             User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
@@ -366,15 +366,15 @@ namespace ExpenseTrackerTests
 
             //Act
             user.Incomes.Add(income);
-            user.UpdateAccountNumberForIncome(indexToUpdate, expectedOuput);
+            user.UpdateAccountNumberForIncome(indexToUpdate, expectedOutput);
 
             //Assert
-            Assert.Equal(expectedOuput, user.Incomes[indexToUpdate - 1].Account);
+            Assert.Equal(expectedOutput, user.Incomes[indexToUpdate - 1].Account);
         }
 
         [Theory]
         [InlineData("TestName", "TestPassword", 1, "Food")]
-        public void UserNamePasswordAndIndexAndValueToUpdate_UpdateCategoryForIncome_IsUpdated(string userName, string userPassword, int indexToUpdate, string expectedOuput)
+        public void UserNamePasswordAndIndexAndValueToUpdate_UpdateCategoryForIncome_IsUpdated(string userName, string userPassword, int indexToUpdate, string expectedOutput)
         {
             //Arrange
             User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
@@ -382,15 +382,15 @@ namespace ExpenseTrackerTests
 
             //Act
             user.Incomes.Add(income);
-            user.UpdateCategoryForIncome(indexToUpdate, expectedOuput);
+            user.UpdateCategoryForIncome(indexToUpdate, expectedOutput);
 
             //Assert
-            Assert.Equal(expectedOuput, user.Incomes[indexToUpdate - 1].Category);
+            Assert.Equal(expectedOutput, user.Incomes[indexToUpdate - 1].Category);
         }
 
         [Theory]
         [InlineData("TestName", "TestPassword", 1, "NotesForIncome")]
-        public void UserNamePasswordAndIndexAndValueToUpdate_UpdateNotesForIncome_IsUpdated(string userName, string userPassword, int indexToUpdate, string expectedOuput)
+        public void UserNamePasswordAndIndexAndValueToUpdate_UpdateNotesForIncome_IsUpdated(string userName, string userPassword, int indexToUpdate, string expectedOutput)
         {
             //Arrange
             User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
@@ -398,15 +398,15 @@ namespace ExpenseTrackerTests
 
             //Act
             user.Incomes.Add(income);
-            user.UpdateNotesForIncome(indexToUpdate, expectedOuput);
+            user.UpdateNotesForIncome(indexToUpdate, expectedOutput);
 
             //Assert
-            Assert.Equal(expectedOuput, user.Incomes[indexToUpdate - 1].Note);
+            Assert.Equal(expectedOutput, user.Incomes[indexToUpdate - 1].Note);
         }
 
         [Theory]
-        [InlineData("TestName", "TestPassword", 1, "NotesForIncome")]
-        public void UserNamePasswordAndIndexAndValueToDelete_DeleteIncome_IsDeleted(string userName, string userPassword, int indexToDelete, string expectedOutput)
+        [InlineData("TestName", "TestPassword", 1)]
+        public void UserNamePasswordAndIndexAndValueToDelete_DeleteIncome_IsDeleted(string userName, string userPassword, int indexToDelete)
         {
             //Arrange
             User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
@@ -426,8 +426,8 @@ namespace ExpenseTrackerTests
         }
 
         [Theory]
-        [InlineData("TestName", "TestPassword", 3, "NotesForIncome")]
-        public void UserNamePasswordAndIndexAndValueToDelete_DeleteIncomeWhenIndexNotValid_IsExceptionThrown(string userName, string userPassword, int indexToUpdate, string expectedOutput)
+        [InlineData("TestName", "TestPassword", 3)]
+        public void UserNamePasswordAndIndexAndValueToDelete_DeleteIncomeWhenIndexNotValid_IsExceptionThrown(string userName, string userPassword, int indexToUpdate)
         {
             //Arrange
             User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
@@ -446,8 +446,8 @@ namespace ExpenseTrackerTests
 
 
         [Theory]
-        [InlineData("TestName", "TestPassword", 1, "NotesForIncome")]
-        public void UserNamePasswordAndIndexAndValueToDelete_DeleteExpense_IsDeleted(string userName, string userPassword, int indexToDelete, string expectedOutput)
+        [InlineData("TestName", "TestPassword", 1)]
+        public void UserNamePasswordAndIndexAndValueToDelete_DeleteExpense_IsDeleted(string userName, string userPassword, int indexToDelete)
         {
             //Arrange
             User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
@@ -465,11 +465,11 @@ namespace ExpenseTrackerTests
         }
 
         [Theory]
-        [InlineData("TestName", "TestPassword", 3, "NotesForIncome")]
-        public void UserNamePasswordAndIndexAndValueToDelete_DeleteExpenseWhenIndexNotValid_IsExceptionThrown(string userName, string userPassword, int indexToUpdate, string expectedOutput)
+        [InlineData("TestName", "TestPassword", 3)]
+        public void UserNamePasswordAndIndexAndValueToDelete_DeleteExpenseWhenIndexNotValid_IsExceptionThrown(string userName, string userPassword, int indexToDelete)
         {
             //Arrange
-            User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
+            User user = new(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
             Expense expenseData1 = new Expense(DateOnly.Parse("2023/10/10"), "Groceries", 5, ModesOfCash.Cash, "From Testing!", 5);
             Expense expenseData2 = new Expense(DateOnly.Parse("2023/10/10"), "Groceries", 5, ModesOfCash.Cash, "From Testing!", 5);
 
@@ -478,7 +478,7 @@ namespace ExpenseTrackerTests
             user.Expenses.Add(expenseData2);
 
             //Assert
-            Assert.Throws<Exception>(() => user.DeleteExpense(indexToUpdate, user));
+            Assert.Throws<Exception>(() => user.DeleteExpense(indexToDelete, user));
 
         }
 
@@ -490,15 +490,15 @@ namespace ExpenseTrackerTests
             User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);
 
             //Act
-            var actualOutput = fileManagerInstance.fileName(user);
+            var actualOutput = fileManagerInstance.FrameUserFilePath(user);
 
             //Assert
             Assert.Equal(expectedOutput, actualOutput);
         }
 
         [Theory]
-        [InlineData("Lipika", "Lipi", "Lipika.json")]
-        public void UserNamePassword_LogInDetailsToFile_IsLogin(string userName, string userPassword, string expectedOutput)
+        [InlineData("Lipika", "Lipi")]
+        public void UserNamePassword_LogInDetailsToFile_IsLogin(string userName, string userPassword)
         {
             //Arrange
             User user = new User(userName, userPassword, categoryInstance, serviceInstance, loggerInstance);

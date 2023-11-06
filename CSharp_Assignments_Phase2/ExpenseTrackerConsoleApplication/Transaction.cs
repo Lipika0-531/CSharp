@@ -40,7 +40,5 @@ namespace ExpenseTrackerConsoleApplication
         /// Notes
         /// </summary>
         public string? Note { get; set; }
-
-
     }
 }
